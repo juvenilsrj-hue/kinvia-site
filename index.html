@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinvia: entenda a rotina do seu bebê, sem virar planilha</title>
+<meta name="description" content="App brasileiro com IA que lê a rotina do bebê: sono, mamadas, vacinas e mais. Em português, acolhedor e sem julgamento.">
+<!-- ===== SEO / Open Graph (troque a imagem e a URL ao publicar) ===== -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kinvia: entenda a rotina do seu bebê, sem virar planilha">
+<meta property="og:description" content="App brasileiro com IA que lê a rotina do bebê: sono, mamadas, vacinas e mais. Em português, acolhedor e sem julgamento.">
+<meta property="og:image" content="photos/hero-2.jpg">
+<meta property="og:url" content="https://kinvia.app">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FBF6EC">
+<!-- ===== Analytics: cole aqui o snippet (GA4 / Plausible / Meta Pixel) ===== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+<style>
+/* ===== paleta Kinvia (pastel), troque aqui as cores ===== */
+:root{
+  --cream:#FBF6EC; --cream2:#F5EDDC; --white:#fff;
+  --kin:#7C6A8A; --via:#D5826A; --via-dark:#C06B52;
+  --c-amarelo:#F4C96B; --c-azul:#98C3E6; --c-lilas:#C2A6DD;
+  --c-verde:#9CD7B0; --c-pessego:#F2C19C; --c-coral:#E89488;
+  --ink:#453831; --muted:#8E7B6C;
+  --radius:26px;
+  --clay:0 20px 50px rgba(124,106,138,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--ink);font-weight:450;line-height:1.65;overflow-x:hidden}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;line-height:1.05;letter-spacing:-.02em}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+img{max-width:100%;display:block}
+[id]{scroll-margin-top:96px}
+
+/* reveal suave ao rolar (aplicado via JS; ?noanim desativa) */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* ===== header ===== */
+header{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s}
+header.scrolled{background:rgba(251,246,236,.9);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(124,106,138,.1)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:80px}
+.logo{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:650;text-decoration:none;letter-spacing:-.02em}
+.logo .k{color:var(--kin)}.logo .v{color:var(--via)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a.lnk{color:var(--ink);text-decoration:none;font-weight:600;font-size:.94rem;opacity:.85}
+.nav-links a.lnk:hover{opacity:1;color:var(--via)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;text-decoration:none;cursor:pointer;border:none;border-radius:999px;padding:14px 28px;font-size:1rem;background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;box-shadow:0 12px 26px rgba(213,130,106,.34);transition:transform .18s,box-shadow .18s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(213,130,106,.44)}
+.btn-ghost{background:var(--white);color:var(--kin);box-shadow:0 8px 22px rgba(124,106,138,.12)}
+.btn-sm{padding:11px 22px;font-size:.92rem}
+
+/* ===== hero ===== */
+.hero{position:relative;padding:150px 0 90px;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;pointer-events:none;z-index:0}
+.hero .wrap{position:relative;z-index:1}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:50px;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.82rem;letter-spacing:.02em;color:var(--via-dark);background:#FBE3D4;border-radius:999px;padding:8px 16px;margin-bottom:24px}
+.hero h1{font-size:clamp(2.9rem,6vw,5rem);color:var(--kin);margin-bottom:22px}
+.hero h1 em{font-style:normal;color:var(--via)}
+.hero .lead{font-size:clamp(1.05rem,1.5vw,1.22rem);color:var(--muted);max-width:500px;margin-bottom:34px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero .micro{margin-top:22px;font-size:.9rem;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hero .micro .st{color:var(--c-amarelo);letter-spacing:1px;font-size:1rem}
+/* fotos escalonadas (estilo Napper) */
+/* iPhone grande no hero (tela real do app) */
+.hero-phone{width:min(280px,70vw);margin:0 auto;background:linear-gradient(160deg,#3a3a42,#0c0c10);border-radius:40px;padding:6px;box-shadow:0 54px 94px -26px rgba(70,45,75,.5),0 14px 30px rgba(124,106,138,.2);position:relative;transform:rotate(2deg)}
+.hero-phone::after{content:"";position:absolute;inset:2px;border-radius:38px;border:1px solid rgba(255,255,255,.1);pointer-events:none}
+.hero-phone .scr{border-radius:34px;overflow:hidden;aspect-ratio:421/996;background:var(--cream)}
+.hero-phone .scr img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ===== seção do vídeo (16:9) ===== */
+.video-sec{padding:96px 0;background:var(--cream2)}
+.video-frame{position:relative;width:min(880px,100%);aspect-ratio:16/9;border-radius:28px;overflow:hidden;margin:0 auto;box-shadow:var(--clay);border:6px solid var(--white);background:linear-gradient(165deg,var(--c-lilas),var(--c-azul))}
+.video-frame video{width:100%;height:100%;object-fit:cover;display:block}
+.video-frame .snd{position:absolute;bottom:16px;right:16px;z-index:3;width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:rgba(40,28,20,.5);color:#fff;font-size:1.05rem;backdrop-filter:blur(4px);transition:background .2s}
+.video-frame .snd:hover{background:rgba(40,28,20,.72)}
+.video-badges{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.video-badges .vb{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;color:var(--ink);background:var(--white);border-radius:999px;padding:10px 18px;box-shadow:0 8px 22px rgba(124,106,138,.12)}
+
+/* ===== faixa de confiança ===== */
+.trust{background:var(--cream2);padding:26px 0}
+.trust .wrap{display:flex;align-items:center;justify-content:center;gap:14px 44px;flex-wrap:wrap;text-align:center}
+.trust .ti{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);font-size:.95rem}
+.trust .ti .em{font-size:1.15rem}
+
+/* ===== mockups (estilo Napper: celulares escalonados) ===== */
+.showcase{padding:100px 0}
+.sc-head{text-align:center;max-width:640px;margin:0 auto 20px}
+.sc-head h2{font-size:clamp(2rem,4vw,3rem);color:var(--kin)}
+.sc-head h2 em{font-style:italic;color:var(--via)}
+.sc-head p{color:var(--muted);font-size:1.1rem;margin-top:14px}
+.iphones{display:flex;gap:44px;justify-content:center;align-items:flex-start;max-width:1080px;margin:46px auto 0;padding:0 20px}
+.ip-item{flex:1 1 0;min-width:0;max-width:270px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.ip-cap{font-weight:700;font-size:.92rem;color:var(--kin);text-align:center}
+.ip-cap small{display:block;font-weight:600;font-size:.76rem;color:var(--muted)}
+.iphone{width:100%;background:linear-gradient(160deg,#3a3a42,#0c0c10);border-radius:30px;padding:5px;box-shadow:0 46px 72px -20px rgba(70,45,75,.45),0 12px 26px rgba(124,106,138,.18);position:relative;transition:transform .25s}
+.iphone:hover{transform:translateY(-10px)}
+.iphone::after{content:"";position:absolute;inset:2px;border-radius:28px;border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:6}
+.iphone .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:42px;height:12px;background:#000;border-radius:99px;z-index:5;box-shadow:0 0 0 2px rgba(255,255,255,.06)}
+.iphone .scr{border-radius:25px;overflow:hidden;background:var(--cream);aspect-ratio:9/16.2;position:relative}
+/* screenshot real: <div class="scr"><img src="telas/hoje.png" alt="Tela Hoje"></div> */
+.iphone .scr img{width:100%;height:100%;object-fit:cover;display:block}
+.iphone .mh{padding:28px 13px 12px;color:#fff}
+.iphone .mh .t{font-weight:700;font-size:.82rem}
+.iphone .mh .s{font-size:.66rem;opacity:.92}
+.iphone .row{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:8px 10px;margin:7px 10px 0}
+.iphone .row .mi{width:27px;height:27px;border-radius:8px;display:grid;place-items:center;font-size:.85rem;flex:none}
+.iphone .row .rt{font-weight:700;font-size:.66rem;color:#3A2E2B;line-height:1.3}
+.iphone .row .rs{font-size:.58rem;color:#8A7768}
+
+/* ===== cta final ===== */
+.final{padding:100px 0}
+.final .box{background:linear-gradient(150deg,var(--c-lilas),var(--c-azul));border-radius:36px;padding:64px 32px;text-align:center;color:#fff;box-shadow:var(--clay);position:relative;overflow:hidden}
+.final h2{font-size:clamp(2rem,4vw,3rem);text-shadow:0 2px 6px rgba(0,0,0,.12);max-width:640px;margin:0 auto 14px}
+.final p{opacity:.95;font-size:1.1rem;margin-bottom:30px}
+.final .btn{background:#fff;color:var(--via-dark)}
+/* ===== lista de interesse (waitlist) ===== */
+.final-eyebrow{display:inline-block;background:rgba(255,255,255,.24);color:#fff;font-weight:800;font-size:.86rem;padding:8px 16px;border-radius:999px;margin-bottom:18px}
+.lista-panel{background:var(--white);border-radius:24px;padding:26px 26px 20px;max-width:620px;margin:0 auto;box-shadow:0 24px 60px rgba(43,31,60,.28);text-align:left}
+.lista-row{display:flex;gap:12px;flex-wrap:wrap}
+.lista-row input{flex:1;min-width:170px;border:2px solid #F0E7D8;border-radius:14px;padding:14px 16px;font-size:1rem;font-family:inherit;background:var(--cream);color:var(--ink);transition:border-color .15s,background .15s}
+.lista-row input:focus{outline:none;border-color:var(--via);background:#fff}
+.lista-row input::placeholder{color:#A99FA8}
+.lista-chips{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.lista-chips label{display:inline-flex;align-items:center;gap:6px;background:var(--cream);border-radius:999px;padding:6px 12px;font-weight:700;font-size:.8rem;color:var(--ink);cursor:pointer;transition:background .15s}
+.lista-chips label:has(input:checked){background:rgba(213,130,106,.12)}
+.lista-chips input{width:13px;height:13px;accent-color:var(--via-dark);cursor:pointer}
+.ic-brand{width:13px;height:13px;flex:none}
+.ic-apple{fill:#111}
+.ic-android{fill:#3DDC84}
+.lista-send{width:100%;background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;font-weight:800;border:0;border-radius:16px;padding:17px 26px;font-size:1.05rem;font-family:inherit;cursor:pointer;box-shadow:0 12px 28px rgba(192,107,82,.35);transition:transform .15s,box-shadow .15s}
+.lista-send:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(192,107,82,.45)}
+.lista-send:disabled{opacity:.75;cursor:default;transform:none}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+.lista-micro{opacity:.92;font-size:.72rem!important;max-width:620px;margin:18px auto 0!important}
+.lista-msg{margin:12px 0 0;font-weight:700;color:var(--via-dark);font-size:.95rem!important}
+.lista-msg:empty{margin:0;min-height:0}
+.lista-msg.ok{color:#3E9B63}
+.lista-msg.err{color:#B3543A}
+.lista-ok{background:var(--white);border-radius:24px;padding:38px 30px 32px;max-width:620px;margin:0 auto;box-shadow:0 24px 60px rgba(43,31,60,.28);color:var(--ink)}
+.lista-ok .big{font-size:2.8rem;line-height:1;margin-bottom:10px}
+.lista-ok h3{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--kin);margin-bottom:10px}
+.lista-ok p{color:var(--muted)!important;opacity:1!important;font-size:1rem!important;margin-bottom:20px!important}
+.wa-share{display:inline-flex;align-items:center;gap:9px;background:#25A05B;color:#fff;font-weight:800;border-radius:999px;padding:13px 26px;text-decoration:none;box-shadow:0 10px 26px rgba(37,160,91,.35);transition:transform .15s}
+.wa-share:hover{transform:translateY(-2px)}
+.lk{display:block;margin:16px auto 0;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-family:inherit;font-size:.85rem}
+.lista-stores-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.lista-stores-badges .sb{display:inline-flex;align-items:center;gap:10px;background:rgba(21,17,14,.82);color:#fff;border-radius:13px;padding:9px 18px;font-size:.72rem;font-weight:600;line-height:1.2;text-align:left}
+.lista-stores-badges .sb b{display:block;font-size:.95rem;font-weight:800}
+.lista-stores-badges .sb .ic{width:22px;height:22px;flex:none;fill:#fff}
+@media(max-width:560px){.lista-row{flex-direction:column}.lista-panel{padding:20px 16px 16px}}
+/* ===== contato ===== */
+.contato{padding:90px 0;background:var(--cream2)}
+.contato-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:start;max-width:1000px;margin:0 auto}
+.contato-info h2{font-size:clamp(1.7rem,3.5vw,2.4rem);color:var(--kin)}
+.contato-info>p{color:var(--muted);font-size:1.05rem;margin:14px 0 26px;max-width:420px}
+.ct-item{display:inline-flex;align-items:center;gap:14px;margin-bottom:6px;text-decoration:none}
+.ct-ic{width:46px;height:46px;border-radius:14px;background:var(--white);box-shadow:0 8px 20px rgba(124,106,138,.1);display:grid;place-items:center;flex:none}
+.ct-ic svg{width:22px;height:22px;fill:var(--via)}
+.ct-tx{color:var(--ink);font-weight:700}
+.ct-tx small{display:block;color:var(--muted);font-weight:500;font-size:.82rem;margin-top:2px}
+.ct-social-label{color:var(--muted);font-weight:600;font-size:.9rem;margin:26px 0 12px}
+.ct-social{display:flex;gap:12px}
+.ct-social a{width:46px;height:46px;border-radius:14px;background:var(--white);box-shadow:0 8px 20px rgba(124,106,138,.1);display:grid;place-items:center;transition:transform .15s}
+.ct-social a:hover{transform:translateY(-3px)}
+.ct-social svg{width:22px;height:22px;fill:var(--kin)}
+.contato-form{background:var(--white);border-radius:24px;padding:30px;box-shadow:var(--clay)}
+.contato-form input,.contato-form textarea{width:100%;border:2px solid #F0E7D8;border-radius:14px;padding:14px 16px;font-size:1rem;font-family:inherit;background:var(--cream);color:var(--ink);margin-bottom:14px;transition:border-color .15s,background .15s}
+.contato-form input:focus,.contato-form textarea:focus{outline:none;border-color:var(--via);background:#fff}
+.contato-form input::placeholder,.contato-form textarea::placeholder{color:#A99FA8}
+.contato-form textarea{resize:vertical;min-height:120px;display:block}
+.contato-form button{width:100%;background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;font-weight:800;border:0;border-radius:14px;padding:15px;font-size:1rem;font-family:inherit;cursor:pointer;transition:transform .15s}
+.contato-form button:hover{transform:translateY(-2px)}
+.contato-form button:disabled{opacity:.75;transform:none}
+.ct-msg{margin-top:12px;font-weight:700;font-size:.9rem;text-align:center;color:var(--via-dark)}
+.ct-msg:empty{margin:0}
+.ct-msg.ok{color:#3E9B63}
+.ct-msg.err{color:#B3543A}
+@media(max-width:820px){.contato-grid{grid-template-columns:1fr;gap:34px}}
+footer{padding:40px 0 46px;color:var(--muted);font-size:.9rem}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.foot a{color:var(--kin);text-decoration:none;font-weight:600;margin-left:18px}
+
+/* ===== A DOR ===== */
+.dor{padding:100px 0;background:var(--cream2)}
+.dor .head{text-align:center;max-width:660px;margin:0 auto 46px}
+.eyebrow{display:inline-block;font-weight:700;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--via-dark);background:#FBE3D4;border-radius:999px;padding:6px 16px;margin-bottom:16px}
+.dor h2{font-size:clamp(1.9rem,4vw,2.9rem);color:var(--kin)}
+.dor h2 em{font-style:italic;color:var(--via)}
+.dor .head p{color:var(--muted);font-size:1.1rem;margin-top:14px}
+.dor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.dor-card{background:var(--white);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--clay)}
+.dor-card .di{display:block;margin-bottom:14px}
+.dor-card .di img{width:64px;height:64px;object-fit:contain;margin:0 auto;filter:drop-shadow(0 8px 14px rgba(124,106,138,.18))}
+.dor-card h3,.dor-card p{text-align:center}
+.dor-card h3{font-size:1.08rem;color:var(--kin);margin-bottom:8px}
+.dor-card p{color:var(--muted);font-size:.95rem}
+.dor-turn{text-align:center;font-family:'Fraunces',serif;font-size:clamp(1.3rem,2.6vw,1.9rem);color:var(--kin);margin-top:44px}
+.dor-turn b{color:var(--via);font-weight:600}
+
+/* ===== Nossa História ===== */
+.hist{padding:96px 0}
+.hist .inner{max-width:760px;margin:0 auto;text-align:center}
+.hist p.big{font-family:'Fraunces',serif;font-size:clamp(1.45rem,3vw,2.1rem);color:var(--kin);line-height:1.45;margin:16px 0 14px}
+.hist p.big em{font-style:italic;color:var(--via)}
+.hist p.sub{color:var(--muted);font-size:1.05rem;max-width:640px;margin:0 auto 24px}
+.hist a.more{color:var(--via-dark);font-weight:700;text-decoration:none;font-size:1rem}
+.hist a.more:hover{text-decoration:underline}
+
+/* ===== Kinvia IA ===== */
+.ia{padding:100px 0;background:var(--cream2)}
+.ia-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.ia-copy h2{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--kin)}
+.ia-copy h2 em{font-style:italic;color:var(--via)}
+.ia-copy p{color:var(--muted);font-size:1.08rem;margin:16px 0 24px;max-width:520px}
+.ia-copy .disc{font-size:.85rem;color:var(--muted);background:var(--white);border-radius:14px;padding:12px 16px;margin-top:22px;display:flex;gap:9px;align-items:flex-start;max-width:520px}
+/* mock fiel à tela real do app */
+.ia-app{background:var(--cream);border-radius:30px;box-shadow:var(--clay);padding:20px;max-width:430px;margin:0 auto;width:100%;border:1px solid rgba(124,106,138,.06)}
+.ia-hello{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#ECDAF3,#F6DCE3);border-radius:22px;padding:18px 20px;margin-bottom:20px}
+.ia-hello .tag{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.06em;color:var(--via-dark);text-transform:uppercase;margin-bottom:5px}
+.ia-hello h3{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--kin);line-height:1.05;margin:0 0 5px}
+.ia-hello .sub{font-size:.82rem;line-height:1.4;color:#7A6E82;margin:0;max-width:230px}
+.ia-hello .spark{font-size:2rem;flex:none;filter:drop-shadow(0 6px 10px rgba(124,106,138,.2))}
+.ia-lbl{font-weight:800;font-size:.92rem;color:var(--kin);margin-bottom:10px}
+.ia-ask{display:flex;align-items:center;gap:9px;background:var(--white);border:1px solid #EFE4D3;border-radius:16px;padding:8px 8px 8px 16px;margin-bottom:22px;box-shadow:0 4px 12px rgba(124,106,138,.05)}
+.ia-ask .ph{color:#B4A9AC;font-size:.86rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ia-ask .mic{width:34px;height:34px;border-radius:11px;background:var(--cream);display:grid;place-items:center;font-size:.9rem;flex:none}
+.ia-ask .send{background:#2C2530;color:#fff;font-weight:700;font-size:.82rem;padding:9px 16px;border-radius:12px;flex:none}
+.ia-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ia-row .ia-lbl{margin-bottom:0}
+.ia-refresh{font-size:.8rem;font-weight:700;color:#7E8FC7;display:inline-flex;align-items:center;gap:5px}
+.ia-resumo{background:var(--white);border-radius:20px;padding:20px;box-shadow:0 6px 18px rgba(124,106,138,.06)}
+.ia-resumo h4{font-weight:800;font-size:.95rem;color:var(--kin);margin:0 0 12px}
+.ia-resumo p{font-size:.83rem;line-height:1.6;color:#6E6570;margin:0 0 13px}
+.ia-resumo p b{color:var(--via-dark);font-weight:800}
+.ia-resumo .obs{font-size:.72rem;color:#A99FA8;margin-bottom:0;padding-top:6px}
+.ia-share{display:flex;align-items:center;justify-content:flex-end;gap:6px;color:#25A05B;font-weight:700;font-size:.85rem;margin-top:14px;padding-top:12px;border-top:1px solid #F2E9DA}
+.ia-share .wa{width:18px;height:18px;border-radius:50%;background:#25A05B;color:#fff;display:grid;place-items:center;font-size:.62rem}
+
+/* ===== Funcionalidades ===== */
+.func{padding:100px 0;background:var(--cream2)}
+.func .head{text-align:center;margin:0 auto 44px;max-width:660px}
+.func h2{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--kin)}
+.func h2 em{font-style:italic;color:var(--via)}
+.func .head p{color:var(--muted);font-size:1.08rem;margin-top:14px}
+.func-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.func-card{background:var(--white);border-radius:18px;padding:20px 18px;box-shadow:0 8px 22px rgba(124,106,138,.08)}
+.func-card .fi{font-size:1.5rem;display:block;margin-bottom:8px}
+.func-card h3{font-size:.98rem;color:var(--kin);margin-bottom:4px}
+.func-card p{font-size:.83rem;color:var(--muted);line-height:1.45}
+
+/* ===== Avaliações ===== */
+.aval{padding:100px 0;background:linear-gradient(180deg,#F4ECF7,#EEE5F3)}
+.aval .head{text-align:center;margin-bottom:44px}
+.aval h2{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--kin)}
+.aval .stars-big{font-size:1.5rem;color:#F2A93B;margin:16px 0 6px;letter-spacing:3px}
+.aval .head p{color:var(--muted);font-weight:600}
+.aval-grid{columns:3;column-gap:22px}
+.tcard{break-inside:avoid;background:var(--white);border-radius:20px;padding:24px;margin-bottom:22px;box-shadow:var(--clay)}
+.tcard .st{color:#F2A93B;font-size:.95rem;letter-spacing:2px;margin-bottom:10px}
+.tcard .q{color:var(--ink);font-size:.98rem;margin-bottom:16px}
+.tcard .who{display:flex;align-items:center;gap:11px}
+.tcard .av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:1.05rem;color:#fff;font-weight:700;flex:none}
+.tcard .who .n{font-weight:700;font-size:.9rem;color:var(--ink)}
+.tcard .who .r{font-size:.78rem;color:var(--muted)}
+
+/* ===== Planos ===== */
+.pricing{padding:60px 0 100px;background:var(--cream2)}
+.pr-card{background:var(--white);border-radius:36px;box-shadow:var(--clay);padding:56px 48px;text-align:center;position:relative;overflow:hidden;max-width:720px;margin:0 auto}
+.pr-card h2{font-size:clamp(1.7rem,3.4vw,2.4rem);color:var(--kin);margin-bottom:10px}
+.pr-card .sub{color:var(--muted);margin-bottom:36px}
+.seg{display:inline-flex;background:var(--cream);border-radius:999px;padding:6px;gap:4px;flex-wrap:wrap;justify-content:center}
+.seg button{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.92rem;border:none;background:transparent;color:var(--muted);border-radius:999px;padding:11px 22px;cursor:pointer;transition:all .2s;position:relative}
+.seg button.on{background:var(--ink);color:var(--cream)}
+.seg button .mini{position:absolute;top:-10px;right:-6px;background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;font-size:.62rem;font-weight:800;border-radius:999px;padding:2px 8px}
+.price-line{margin:42px 0 6px;display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap}
+.price-line .rs{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:550;color:var(--muted)}
+.price-line .val{font-family:'Fraunces',serif;font-size:clamp(4rem,9vw,5.6rem);font-weight:600;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.price-line .per{font-size:1.05rem;color:var(--muted);font-weight:600}
+.badge-off{display:inline-block;font-weight:700;font-size:.95rem;color:#fff;background:linear-gradient(140deg,var(--via),var(--via-dark));border-radius:999px;padding:8px 22px;margin-bottom:14px}
+.cobr{color:var(--muted);font-size:.95rem;min-height:24px}
+.econ{font-weight:700;color:#3E9B63;font-size:1rem;min-height:26px;margin-top:4px}
+.founder{margin:18px auto 0;max-width:460px;background:rgba(213,130,106,.10);border:1px solid rgba(213,130,106,.28);border-radius:14px;padding:12px 18px;font-size:.92rem;color:var(--via-dark);line-height:1.5}
+.pr-card .cta{margin:22px 0 12px}
+.pr-card .micro{font-size:.85rem;color:var(--muted)}
+.inclui{display:flex;gap:10px 26px;justify-content:center;flex-wrap:wrap;margin-top:38px;padding-top:32px;border-top:1px dashed #EBDFC9}
+.inclui span{font-size:.9rem;font-weight:600;color:var(--ink)}
+.free-line{text-align:center;margin-top:30px;color:var(--muted);font-size:.95rem}
+.free-line a{color:var(--via-dark);font-weight:700;text-decoration:none}
+
+/* ===== FAQ ===== */
+.faq{padding:100px 0}
+.faq h2{text-align:center;font-size:clamp(1.7rem,3vw,2.4rem);color:var(--kin);margin-bottom:38px}
+.faq-list{max-width:680px;margin:0 auto}
+details{border-bottom:1px solid #EBDFC9}
+summary{cursor:pointer;list-style:none;padding:22px 44px 22px 4px;font-weight:700;color:var(--ink);font-size:1rem;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--via);font-size:1.5rem;font-weight:400;transition:transform .2s}
+details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600px}
+
+/* ===== como funciona (passos + telas) ===== */
+.como{padding:100px 0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1040px;margin:0 auto;padding:0 26px}
+.step{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.step .num{width:44px;height:44px;border-radius:50%;background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.05rem;box-shadow:0 10px 22px rgba(213,130,106,.35)}
+.step h3{font-size:1.15rem;color:var(--kin)}
+.step p{color:var(--muted);font-size:.95rem;max-width:280px;margin-bottom:12px}
+.step .iphone{max-width:230px}
+
+/* ===== extras da rotina (pills) ===== */
+.extra{padding:90px 0}
+.extra .head{text-align:center;max-width:640px;margin:0 auto 34px}
+.extra h2{font-size:clamp(1.8rem,3.6vw,2.6rem);color:var(--kin)}
+.extra h2 em{font-style:italic;color:var(--via)}
+.extra .head p{color:var(--muted);font-size:1.05rem;margin-top:12px}
+.pills{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:880px;margin:0 auto;padding:0 24px}
+.pills span{background:var(--white);border-radius:999px;padding:11px 20px;font-weight:600;font-size:.92rem;color:var(--ink);box-shadow:0 8px 20px rgba(124,106,138,.1)}
+
+/* ===== responsivo ===== */
+@media(max-width:900px){
+  .dor-grid{grid-template-columns:1fr}
+  .ia-grid{grid-template-columns:1fr;gap:40px}
+  .ia-copy{text-align:center}
+  .ia-copy p,.ia-copy .disc{margin-left:auto;margin-right:auto}
+  .func-grid{grid-template-columns:repeat(2,1fr)}
+  .aval-grid{columns:1;max-width:520px;margin:0 auto}
+  .pr-card{padding:44px 24px}
+  .nav-links a.lnk{display:none}
+  .hero{padding:130px 0 70px}
+  .hero-grid{grid-template-columns:1fr;gap:34px}
+  .hero .lead{margin-left:auto;margin-right:auto}
+  .hero-cta{justify-content:center}
+  .hero-copy{text-align:center}
+  .hero .micro{justify-content:center}
+  .hero-media{max-width:520px;margin:0 auto}
+  .steps{grid-template-columns:1fr;gap:46px}
+}
+@media(max-width:560px){
+  .hero h1{font-size:2.6rem}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="logo" href="#top"><span class="k">Kin</span><span class="v">via</span></a>
+    <nav class="nav-links">
+      <a class="lnk" href="#como-funciona">Como funciona</a>
+      <a class="lnk" href="#nossa-historia">Nossa história</a>
+      <a class="lnk" href="#kinvia-ia">Kinvia IA</a>
+      <a class="lnk" href="#planos">Planos</a>
+      <a class="btn btn-sm" href="#lista">Entrar na lista</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== HERO (título + fotos escalonadas) ===== -->
+<main>
+<section class="hero" id="top">
+  <span class="blob" style="width:420px;height:420px;background:var(--c-lilas);top:-80px;right:-60px"></span>
+  <span class="blob" style="width:360px;height:360px;background:var(--c-azul);bottom:-100px;left:-80px"></span>
+  <span class="blob" style="width:280px;height:280px;background:var(--c-pessego);top:40%;left:30%;opacity:.35"></span>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="kicker">☁️ App brasileiro · rotina do bebê</span>
+        <h1>A hora certa do soninho, <em>sem adivinhar.</em></h1>
+        <p class="lead">A Kinvia aprende o ritmo do seu bebê com o que você registra, e avisa quando a janela de sono abre, antes do choro de cansaço. Em português, com acolhimento e sem julgamento.</p>
+        <div class="hero-cta">
+          <a class="btn" href="#lista">Entrar na lista de espera</a>
+          <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
+        </div>
+        <p class="micro"><span class="st">★★★★★</span> Feito por pais brasileiros · Começa grátis · Cancele quando quiser</p>
+      </div>
+      <div class="hero-media">
+        <!-- Tela real do app no hero (linha do tempo do dia). Para trocar, substitua telas/dia.jpg -->
+        <div class="hero-phone">
+          <div class="scr"><img src="telas/dia.jpg" alt="Linha do tempo do dia no app Kinvia" loading="eager"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== A DOR (storytelling do sono) ===== -->
+<section class="dor" id="dor">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">A real da maternidade</span>
+      <h2>Ninguém avisa que a rotina do bebê <em>pode virar o centro da casa.</em></h2>
+      <p>Não é falta de amor. É cansaço, excesso de informação e falta de clareza no dia a dia.</p>
+    </div>
+    <div class="dor-grid">
+      <div class="dor-card"><span class="di"><img src="emo/cabeca.png" alt=""></span><h3>Quando tudo fica na cabeça, a rotina pesa</h3><p>Foi peito ou mamadeira? Que horas dormiu? Quanto tempo ficou acordado? No corre do cuidado, tentar lembrar de tudo vira mais uma carga para mãe e pai.</p></div>
+      <div class="dor-card"><span class="di"><img src="emo/soneca.png" alt=""></span><h3>A soneca que saiu do ritmo</h3><p>Às vezes o bebê chora, a casa para e ninguém entende exatamente o que aconteceu. Pode ser sono, fome, cansaço acumulado ou uma rotina que perdeu o ponto.</p></div>
+      <div class="dor-card"><span class="di"><img src="emo/tentativa.png" alt=""></span><h3>Cada dia parece uma tentativa</h3><p>Sem enxergar o padrão, cada mamada, soneca e mudança de humor parece um recomeço. A família ajusta tudo no improviso, tentando acertar no meio do cansaço.</p></div>
+    </div>
+    <p class="dor-turn">O segredo não é adivinhar. <b>É registrar, acompanhar e deixar a Kinvia revelar o padrão.</b></p>
+  </div>
+</section>
+
+<!-- ===== como funciona (3 passos com telas reais) ===== -->
+<section class="como" id="como-funciona">
+  <div class="sc-head" style="margin-bottom:46px">
+    <h2>Do cuidado diário à <em>rotina mais leve.</em></h2>
+    <p>Registre sono, mamadas e fraldas. A Kinvia organiza os dados e ajuda você a entender melhor o ritmo do seu bebê.</p>
+  </div>
+  <div class="steps">
+    <!-- Telas reais do app (telas/*.jpg; há também vacinas.jpg, crescimento.jpg e dia.jpg disponíveis) -->
+    <div class="step">
+      <span class="num">1</span>
+      <h3>Registre em um toque</h3>
+      <p>Sono, mamadas e fraldas no momento em que acontecem, até por voz, com o bebê no colo.</p>
+      <div class="iphone"><div class="scr"><img src="telas/hoje.jpg" alt="Registro em um toque no app Kinvia" loading="lazy"></div></div>
+    </div>
+    <div class="step">
+      <span class="num">2</span>
+      <h3>A Kinvia aprende o ritmo</h3>
+      <p>A IA cruza os registros com as janelas de sono da idade e encontra o padrão do seu bebê.</p>
+      <div class="iphone"><div class="scr"><img src="telas/ia.jpg" alt="Kinvia IA lendo a rotina do bebê" loading="lazy"></div></div>
+    </div>
+    <div class="step">
+      <span class="num">3</span>
+      <h3>Você antecipa o soninho</h3>
+      <p>A janela abre, você fica sabendo. Bebê no berço na hora certa, antes do choro de cansaço.</p>
+      <div class="iphone"><div class="scr"><img src="telas/sono.jpg" alt="Janela de soneca no app Kinvia" loading="lazy"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Vídeo: a rotina de verdade ===== -->
+<section class="video-sec" id="video">
+  <div class="wrap">
+    <div class="sc-head" style="margin-bottom:36px">
+      <h2>O Kin<span style="color:var(--via)">via</span> na <em>rotina de verdade.</em></h2>
+      <p>Mães e pais usando o app no corre do dia a dia, do jeito que a maternidade realmente é.</p>
+    </div>
+    <!-- Nosso vídeo (16:9). Para trocar, substitua videos/kinvia-site.mp4 -->
+    <div class="video-frame">
+      <video autoplay loop muted playsinline preload="metadata">
+        <source src="videos/kinvia-site.mp4" type="video/mp4">
+      </video>
+      <button class="snd" id="vidSnd" type="button" aria-label="Ativar som">🔇</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Nossa História ===== -->
+<section class="hist" id="nossa-historia">
+  <div class="wrap">
+    <div class="inner">
+      <span class="eyebrow">Nossa história</span>
+      <p class="big">Antes de ser um app, <em>foi o diário da Olívia.</em></p>
+      <p class="sub">A Olívia chegou em 15 de janeiro de 2026, e a Kinvia nasceu junto, dentro da nossa casa. Desde então somos nós, os pais, registrando cada soneca e mamada em dois celulares sincronizados, vivendo na pele, ainda hoje, o que você vive aí. <b>Kin</b>, de família. <b>Via</b>, da Olívia.</p>
+      <a class="more" href="historia.html">Ler a história completa →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Kinvia IA ===== -->
+<section class="ia" id="kinvia-ia">
+  <div class="wrap ia-grid">
+    <div class="ia-copy">
+      <span class="eyebrow">✨ Kinvia IA</span>
+      <h2>Seu bebê tem um ritmo. <em>A Kinvia ajuda você a enxergar.</em></h2>
+      <p>Acompanhe sono, mamadas, fraldas e cuidados do dia a dia. A Kinvia IA cruza essas informações e revela padrões que ajudam você a entender melhor a rotina do bebê.</p>
+      <p>Tudo de forma simples, por texto ou voz, com respostas baseadas nos dados que você registrou.</p>
+      <a class="btn" href="#lista">Quero ser avisado no lançamento</a>
+      <p class="disc"><span>ℹ️</span> A Kinvia IA apoia a organização da rotina e não substitui orientação médica ou pediátrica.</p>
+    </div>
+    <div class="ia-app">
+      <div class="ia-hello">
+        <div>
+          <span class="tag">✨ Kinvia IA</span>
+          <h3>Bom dia!</h3>
+          <p class="sub">Acompanhando os padrões da Olívia. Veja o que aprendi 👇</p>
+        </div>
+        <span class="spark">✨</span>
+      </div>
+
+      <div class="ia-lbl">💬 Pergunte à Kinvia IA</div>
+      <div class="ia-ask">
+        <span class="ph">Ex.: por que ela acorda de madrugada?</span>
+        <span class="mic">🎤</span>
+        <span class="send">Enviar</span>
+      </div>
+
+      <div class="ia-row">
+        <span class="ia-lbl">📝 Resumo da semana</span>
+        <span class="ia-refresh">🔄 Atualizar</span>
+      </div>
+      <div class="ia-resumo">
+        <h4>Resumo da semana da Olívia, 5 meses 🍼</h4>
+        <p>Que semana interessante! Ela dormiu um pouco menos do que na semana anterior (12h30 vs 13h30), e as fraldas também diminuíram levemente. Isso pode ser normal conforme ela cresce, mas vale acompanhar se mantém o padrão ou volta ao ritmo anterior.</p>
+        <p><b>Alimentação:</b> está mamando bem distribuído ao longo do dia, com a noite sendo o período de maior consumo (299 ml). É comum nessa idade e não é sinal de preocupação.</p>
+        <p><b>Sono:</b> ainda muito saudável, com sonecas frequentes durante o dia (7 no total) e um sono noturno robusto de quase 9 horas. As janelas de vigília (à noite, com 55 min) mostram uma bebê bem ajustada.</p>
+        <p><b>Uma sugestão carinhosa:</b> observe as próximas fraldas com calma. Se continuarem reduzindo muito, converse com o pediatra só para ter tranquilidade. Enquanto isso, aproveite que o sono dela está ótimo! 💗</p>
+        <p class="obs">Obs.: lançamentos corretos garantem informações confiáveis.</p>
+        <div class="ia-share"><span class="wa">✓</span> Compartilhar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== e o resto da rotina (compacto) ===== -->
+<section class="extra" id="funcionalidades">
+  <div class="wrap">
+    <div class="head">
+      <h2>E o resto da rotina? <em>Já mora aqui.</em></h2>
+      <p>Quando o sono encontra o ritmo, o resto acompanha, tudo num app só.</p>
+    </div>
+    <div class="pills">
+      <span>🍼 Mamadas e mamadeira em ml</span>
+      <span>💉 Vacinas SUS × particular</span>
+      <span>💊 Remédios e febre</span>
+      <span>📈 Crescimento nas curvas da OMS</span>
+      <span>🥄 Introdução alimentar e alérgenos</span>
+      <span>👨‍👩‍👧 Família sincronizada</span>
+      <span>👯 Suporte a gêmeos</span>
+      <span>🎤 Registro por voz</span>
+      <span>📄 Relatório PDF para o pediatra</span>
+      <span>⭐ Marcos e humor</span>
+      <span>🔒 Backup e exportação</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Avaliações ===== -->
+<section class="aval" id="avaliacoes">
+  <div class="wrap">
+    <div class="head">
+      <h2>Famílias que pararam de anotar em bilhetinho</h2>
+      <div class="stars-big">★★★★★</div>
+      <p>O que mães e pais dizem depois de organizar a rotina na Kinvia</p>
+    </div>
+    <div class="aval-grid">
+      <div class="tcard"><div class="st">★★★★★</div><p class="q">"Larguei os bilhetinhos na geladeira. Agora eu e meu marido vemos a mesma rotina da Aurora, cada um no seu celular."</p><div class="who"><span class="av" style="background:var(--c-coral)">M</span><div><div class="n">Marina</div><div class="r">mãe da Aurora</div></div></div></div>
+      <div class="tcard"><div class="st">★★★★★</div><p class="q">"O registro por voz salvou minhas madrugadas. Falo 'mamou 100 ml' e volto a dormir, sem acender luz nenhuma."</p><div class="who"><span class="av" style="background:var(--c-lilas)">C</span><div><div class="n">Carla</div><div class="r">mãe do Theo</div></div></div></div>
+      <div class="tcard"><div class="st">★★★★★</div><p class="q">"As janelas de sono me ajudaram a antecipar o cansaço. O clima em casa ficou bem mais leve."</p><div class="who"><span class="av" style="background:var(--c-amarelo)">R</span><div><div class="n">Renata</div><div class="r">mãe da Liz</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Planos ===== -->
+<section class="pricing" id="planos">
+  <div class="wrap">
+    <div class="pr-card">
+      <h2>Este é o preço de lançamento.</h2>
+      <p class="sub">Entre na lista agora e garanta este valor de fundador, com 1 mês grátis quando a Kinvia chegar às lojas.</p>
+      <div class="seg" id="seg">
+        <button data-p="mensal">Mensal</button>
+        <button data-p="trimestral">Trimestral</button>
+        <button data-p="semestral">Semestral</button>
+        <button data-p="anual" class="on">Anual <span class="mini">-56%</span></button>
+      </div>
+      <div class="price-line"><span class="rs">R$</span><span class="val" id="pVal">21,90</span><span class="per">/mês</span></div>
+      <div><span class="badge-off" id="pBadge">56% OFF · melhor escolha</span></div>
+      <p class="cobr" id="pCobr">cobrado R$ 262,80 uma vez ao ano · dá R$ 0,72 por dia</p>
+      <p class="econ" id="pEcon">você economiza R$ 336,00 por ano</p>
+      <p class="founder">🎁 <b>Preço de fundador:</b> quem entra na lista agora garante este valor e ganha <b>1 mês grátis</b> no lançamento.</p>
+      <div class="cta"><a class="btn" style="padding:17px 42px;font-size:1.1rem" href="#lista">Entrar na lista · 1 mês grátis</a></div>
+      <p class="micro">sem fidelidade · seus dados são seus, sempre</p>
+      <div class="inclui">
+        <span>🎤 Registro por voz</span><span>💉 Vacinas com lembrete</span><span>📄 PDF para o pediatra</span><span>📈 Curvas OMS</span><span>👨‍👩‍👧 Família sincronizada</span><span>✨ Kinvia IA</span>
+      </div>
+    </div>
+    <p class="free-line">Vai ter plano grátis para sempre, com os registros essenciais e sem cartão. <a href="#lista">Entre na lista</a> e a gente te avisa quando abrir.</p>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <h2>Perguntas rápidas</h2>
+    <div class="faq-list">
+      <details><summary>Quando a Kinvia fica disponível nas lojas?</summary><div class="a">Estamos nos ajustes finais. Entre na lista de espera e você é avisada em primeira mão quando o app chegar à App Store e ao Google Play, com 1 mês grátis de Premium garantido por ter chegado cedo.</div></details>
+      <details><summary>E se eu quiser só o plano grátis?</summary><div class="a">Ele é grátis para sempre, com os registros essenciais (mamada, sono, fralda e banho) para 1 bebê. Sem cartão, sem prazo.</div></details>
+      <details><summary>Outras pessoas podem usar junto?</summary><div class="a">Sim. No Premium você convida quem cuida com você, pai, mãe, avós, e tudo sincroniza em tempo real. Funciona com mais de um bebê.</div></details>
+      <details><summary>A Kinvia IA substitui o pediatra?</summary><div class="a">Não. A Kinvia IA não substitui pediatra, diagnóstico, prescrição ou orientação médica. Ela apoia a organização da rotina e ajuda a família a enxergar padrões a partir dos dados registrados.</div></details>
+      <details><summary>Meus dados estão protegidos?</summary><div class="a">Os dados do seu bebê são seus: criptografados em trânsito, exportáveis quando quiser e apagáveis por completo a pedido, como manda a LGPD.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA final = lista de interesse ===== -->
+<section class="final" id="lista">
+  <div class="wrap">
+    <div class="box">
+      <span class="final-eyebrow">🎁 1 mês grátis para quem entrar agora</span>
+      <h2>Seja a primeira a saber quando a Kinvia chegar.</h2>
+      <p>Deixe seu nome e e-mail.<br>A gente avisa em primeira mão quando o app estiver nas lojas,<br>e você garante <b>1 mês grátis</b> de Premium no lançamento.</p>
+
+      <div class="lista-panel" id="listaPanel">
+        <form id="listaForm" novalidate>
+          <div class="lista-row">
+            <input type="text" name="nome" placeholder="Seu nome + sobrenome" required autocomplete="name" maxlength="120">
+            <input type="email" name="email" placeholder="Seu e-mail" required autocomplete="email" maxlength="200" inputmode="email">
+          </div>
+          <div class="lista-chips">
+            <label><input type="checkbox" name="ios"> <svg class="ic-brand ic-apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg> Uso iPhone</label>
+            <label><input type="checkbox" name="android"> <svg class="ic-brand ic-android" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.2439 13.8533 7.8508 12 7.8508s-3.5902.3931-5.1367 1.0729L4.841 5.4207a.4161.4161 0 00-.5676-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3435-4.1021-2.6892-7.5743-6.1185-9.4396"/></svg> Uso Android</label>
+          </div>
+          <input type="text" name="contato" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button type="submit" class="lista-send">Quero 1 mês grátis 🎁</button>
+        </form>
+        <p class="lista-msg" id="listaMsg" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="lista-ok" id="listaOk" hidden>
+        <div class="big">🎉</div>
+        <h3 id="okTitulo">Você está na lista!</h3>
+        <p>Guardamos seu lugar. Quando a Kinvia chegar à App Store e ao Google Play, você recebe o aviso em primeira mão, com 1 mês grátis de Premium.</p>
+        <a class="wa-share" id="waShare" href="#" target="_blank" rel="noopener">💬 Chamar uma amiga pra lista</a>
+        <button type="button" class="lk" id="okOutro">cadastrar outro e-mail</button>
+      </div>
+
+      <p class="lista-micro">Sem spam, só o aviso do lançamento. Seus dados seguem a LGPD e você sai da lista quando quiser.</p>
+      <div class="lista-stores-badges">
+        <span class="sb"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span>Em breve na<b>App Store</b></span></span>
+        <span class="sb"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.9-.181l13.324-7.54-3.224-3.212z"/></svg><span>Em breve no<b>Google Play</b></span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== contato / suporte ===== -->
+<section class="contato" id="contato">
+  <div class="wrap contato-grid">
+    <div class="contato-info">
+      <span class="eyebrow">💬 Fale com a gente</span>
+      <h2>Estamos aqui pra ajudar</h2>
+      <p>Dúvida, sugestão ou só um oi? A gente adora conversar. Escreva pelo formulário ou pelo e-mail, e siga a Kinvia nas redes.</p>
+      <a class="ct-item" href="mailto:juvenilsrj@gmail.com">
+        <span class="ct-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
+        <span class="ct-tx">juvenilsrj@gmail.com<small>A gente responde em até 1 dia útil</small></span>
+      </a>
+      <p class="ct-social-label">Siga a Kinvia:</p>
+      <div class="ct-social">
+        <a href="https://instagram.com/kinvia" target="_blank" rel="noopener" aria-label="Instagram da Kinvia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63 19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg></a>      </div>
+    </div>
+    <div class="contato-form">
+      <form id="contatoForm" novalidate>
+        <input type="text" name="nome" placeholder="Nome" required autocomplete="name" maxlength="120">
+        <input type="email" name="email" placeholder="E-mail" required autocomplete="email" maxlength="200" inputmode="email">
+        <textarea name="mensagem" placeholder="Sua mensagem" required maxlength="4000"></textarea>
+        <input type="text" name="site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit">Enviar mensagem</button>
+      </form>
+      <p class="ct-msg" id="ctMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><a class="logo" href="#top" style="font-size:1.1rem"><span class="k">Kin</span><span class="v">via</span></a> · © 2026 · Feito no Brasil com 💛</div>
+    <div>
+      <a href="historia.html">Nossa história</a>
+      <a href="#planos">Planos</a>
+      <a href="#contato">Contato</a>
+      <a href="privacidade.html">Privacidade</a>
+      <a href="https://instagram.com/kinvia" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(124,106,138,.12);font-size:.8rem;text-align:center;color:var(--muted)">
+    A Kinvia organiza informações da rotina do bebê, mas não substitui orientação médica ou pediátrica.
+  </div>
+</footer>
+
+<script>
+const hdr=document.getElementById('hdr');
+addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30),{passive:true});
+/* reveal suave ao rolar (?noanim na URL desativa, p/ testes) */
+(function(){
+  if(location.search.includes('noanim')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const els=document.querySelectorAll('.hero-copy,.hero-media,.dor .head,.dor-card,.dor-turn,.sc-head,.step,.video-frame,.hist .inner,.ia-copy,.ia-app,.extra .head,.pills,.aval .head,.tcard,.pr-card,.free-line,.faq h2,.faq-list,.final .box');
+  els.forEach(el=>el.classList.add('reveal'));
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+  els.forEach(el=>io.observe(el));
+})();
+/* botão de som do vídeo do hero */
+(function(){const v=document.querySelector('.video-frame video'),b=document.getElementById('vidSnd');if(!v||!b)return;b.addEventListener('click',()=>{v.muted=!v.muted;b.textContent=v.muted?'🔇':'🔊';if(!v.muted)v.play().catch(()=>{});});})();
+/* seletor de planos */
+const PLANOS={
+  mensal:{val:'49,90',badge:null,cobr:'cobrado mensalmente · sem fidelidade',econ:''},
+  trimestral:{val:'34,90',badge:'30% OFF',cobr:'cobrado R$ 104,70 a cada 3 meses',econ:'você economiza R$ 180,00 por ano'},
+  semestral:{val:'29,90',badge:'40% OFF',cobr:'cobrado R$ 179,40 a cada 6 meses',econ:'você economiza R$ 240,00 por ano'},
+  anual:{val:'21,90',badge:'56% OFF · melhor escolha',cobr:'cobrado R$ 262,80 uma vez ao ano · dá R$ 0,72 por dia',econ:'você economiza R$ 336,00 por ano'}
+};
+const seg=document.getElementById('seg');
+if(seg)seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const p=PLANOS[b.dataset.p];document.getElementById('pVal').textContent=p.val;const bd=document.getElementById('pBadge');bd.textContent=p.badge||'';bd.style.opacity=p.badge?1:0;document.getElementById('pCobr').textContent=p.cobr;document.getElementById('pEcon').textContent=p.econ;});
+/* lista de interesse -> Supabase (tabela kv_waitlist, RLS insert-only) */
+(function(){
+  const SB_URL='https://fzsksitqokoxzjfibitg.supabase.co';
+  const SB_KEY='sb_publishable_aJbuOSFLHu5iDAH979ZPtQ_YpIGTG7q';
+  const BTN_LABEL='Quero 1 mês grátis 🎁';
+  const form=document.getElementById('listaForm');
+  const panel=document.getElementById('listaPanel');
+  const ok=document.getElementById('listaOk');
+  const msg=document.getElementById('listaMsg');
+  if(!form||!panel||!ok||!msg)return;
+  const emailOk=v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
+  function celebrar(nome){
+    panel.hidden=true;ok.hidden=false;
+    if(nome)document.getElementById('okTitulo').textContent='Pronto, '+nome+'! Você está na lista.';
+    const url=location.origin+location.pathname;
+    const txt='Ei! Entrei na lista de espera da Kinvia, um app brasileiro que organiza a rotina do bebê. Quem entra agora ganha 1 mês grátis no lançamento: '+url;
+    document.getElementById('waShare').href='https://wa.me/?text='+encodeURIComponent(txt);
+    try{localStorage.setItem('kv_lista_nome',nome||'')}catch(e){}
+  }
+  /* quem já se cadastrou neste aparelho volta a ver o sucesso, não o form */
+  try{const n=localStorage.getItem('kv_lista_nome');if(n!==null)celebrar(n);}catch(e){}
+  document.getElementById('okOutro').addEventListener('click',()=>{
+    try{localStorage.removeItem('kv_lista_nome')}catch(e){}
+    ok.hidden=true;panel.hidden=false;form.reset();
+    const btn=form.querySelector('.lista-send');btn.disabled=false;btn.textContent=BTN_LABEL;
+    msg.textContent='';msg.className='lista-msg';form.nome.focus();
+  });
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const btn=form.querySelector('.lista-send');
+    const nome=form.nome.value.trim();
+    const email=form.email.value.trim().toLowerCase();
+    if(form.contato&&form.contato.value){celebrar(nome.split(' ')[0]);return;} /* honeypot: bot preencheu, finge sucesso sem gravar */
+    if(nome.split(/\s+/).filter(Boolean).length<2){msg.className='lista-msg err';msg.textContent='Coloque seu nome e sobrenome, por favor 💛';form.nome.focus();return;}
+    if(!emailOk(email)){msg.className='lista-msg err';msg.textContent='Confere o e-mail, parece que faltou algo. ✍️';form.email.focus();return;}
+    const ios=form.querySelector('[name=ios]').checked;
+    const android=form.querySelector('[name=android]').checked;
+    if(!ios&&!android){msg.className='lista-msg err';msg.textContent='Marque onde você usa: iPhone ou Android 🙂';return;}
+    btn.disabled=true;btn.textContent='Guardando seu lugar...';msg.textContent='';msg.className='lista-msg';
+    const ctl=new AbortController();const tid=setTimeout(()=>ctl.abort(),12000);
+    try{
+      const r=await fetch(SB_URL+'/rest/v1/kv_waitlist',{
+        method:'POST',signal:ctl.signal,
+        headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({nome:nome,email:email,quer_ios:ios,quer_android:android,origem:'site-kinvia'})
+      });
+      if(r.ok||r.status===409){celebrar(nome.split(' ')[0]);}
+      else{throw new Error('http '+r.status);}
+    }catch(err){
+      msg.className='lista-msg err';
+      msg.textContent='Ops, não consegui salvar agora. Tente de novo em instantes.';
+      btn.disabled=false;btn.textContent=BTN_LABEL;
+    }finally{clearTimeout(tid);}
+  });
+})();
+/* formulario de contato -> Supabase (kv_contato) */
+(function(){
+  const SB_URL='https://fzsksitqokoxzjfibitg.supabase.co';
+  const SB_KEY='sb_publishable_aJbuOSFLHu5iDAH979ZPtQ_YpIGTG7q';
+  const form=document.getElementById('contatoForm');
+  const msg=document.getElementById('ctMsg');
+  if(!form||!msg)return;
+  const emailOk=v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const btn=form.querySelector('button');
+    const nome=form.nome.value.trim();
+    const email=form.email.value.trim().toLowerCase();
+    const mensagem=form.mensagem.value.trim();
+    if(form.site&&form.site.value){msg.className='ct-msg ok';msg.textContent='Mensagem enviada, obrigada! 💛';form.reset();return;}
+    if(nome.length<2){msg.className='ct-msg err';msg.textContent='Como podemos te chamar? 💛';form.nome.focus();return;}
+    if(!emailOk(email)){msg.className='ct-msg err';msg.textContent='Confere o e-mail, por favor. ✍️';form.email.focus();return;}
+    if(mensagem.length<5){msg.className='ct-msg err';msg.textContent='Escreva sua mensagem, a gente quer ler 💬';form.mensagem.focus();return;}
+    const orig=btn.textContent;btn.disabled=true;btn.textContent='Enviando...';msg.textContent='';msg.className='ct-msg';
+    const ctl=new AbortController();const tid=setTimeout(()=>ctl.abort(),12000);
+    try{
+      const r=await fetch(SB_URL+'/rest/v1/kv_contato',{
+        method:'POST',signal:ctl.signal,
+        headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({nome:nome,email:email,mensagem:mensagem,origem:'site-kinvia'})
+      });
+      if(r.ok){form.reset();msg.className='ct-msg ok';msg.textContent='Mensagem enviada, obrigada! A gente retorna em breve. 💛';btn.disabled=false;btn.textContent=orig;}
+      else{throw new Error('http '+r.status);}
+    }catch(err){msg.className='ct-msg err';msg.textContent='Não consegui enviar agora. Tente de novo ou escreva para juvenilsrj@gmail.com';btn.disabled=false;btn.textContent=orig;}
+    finally{clearTimeout(tid);}
+  });
+})();
+</script>
+</body>
+</html>

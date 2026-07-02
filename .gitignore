@@ -1,0 +1,14 @@
+# variantes antigas do site (não vão pro deploy)
+index-antigo-cocoa.html
+index-claro.html
+index-dark.html
+index-mare.html
+index-bruma.html
+index-salvia.html
+
+# arquivos temporários de teste/preview
+_*.html
+
+# sistema
+.DS_Store
+Thumbs.db

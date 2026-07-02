@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A História da Kinvia</title>
+<meta name="description" content="A história da Kinvia: um app que nasceu dentro da nossa própria casa, com a chegada da Olívia. Kin, de família. Via, da Olívia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FBF6EC; --cream2:#F5EDDC; --white:#fff;
+  --kin:#7C6A8A; --via:#D5826A; --via-dark:#C06B52;
+  --petrol:#1B2E33; --petrol2:#28424A; --petrol-text:#EDF4F3;
+  --ink:#453831; --muted:#94816F; --lilac:#EBDFD0;
+  --c1:#98C3E6; --c2:#9CD7B0; --c3:#F4C96B; --c4:#F2C19C; --c5:#C2A6DD; --c6:#E89488;
+  --radius:28px;
+  --clay:0 16px 36px rgba(124,106,138,.13), inset 0 3px 0 rgba(255,255,255,.7);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--ink);font-weight:450;line-height:1.7;overflow-x:hidden}
+h1,h2{font-family:'Fraunces',serif;font-weight:550;line-height:1.14;letter-spacing:-.01em;color:var(--kin)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+[id]{scroll-margin-top:90px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1 !important;transform:none !important;transition:none !important}html{scroll-behavior:auto}}
+
+/* ---------- nav (igual ao site) ---------- */
+header.topo{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,box-shadow .3s}
+header.topo.scrolled{background:rgba(251,246,236,.9);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(124,106,138,.12)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:76px}
+.logo{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:650;text-decoration:none}
+.logo .k{color:var(--kin)}.logo .v{color:var(--via)}
+.nav-right{display:flex;align-items:center;gap:24px}
+.nav-right a.lnk{color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem}
+.nav-right a.lnk:hover{color:var(--via)}
+.btn{display:inline-block;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;letter-spacing:.01em;text-decoration:none;cursor:pointer;border:none;border-radius:999px;padding:14px 30px;font-size:1.02rem;background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;box-shadow:0 12px 26px rgba(213,130,106,.35);transition:transform .18s,box-shadow .18s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(213,130,106,.45)}
+.btn-sm{padding:10px 22px;font-size:.92rem}
+
+/* ---------- hero ---------- */
+.hist-hero{text-align:center;padding:170px 24px 72px;position:relative;overflow:hidden}
+.eyebrow{display:inline-block;font-weight:700;font-size:.85rem;letter-spacing:.18em;text-transform:uppercase;color:var(--via-dark);background:#FBE3D4;border-radius:999px;padding:7px 18px;margin-bottom:22px}
+.hist-hero h1{font-size:clamp(2.2rem,5vw,3.5rem);max-width:720px;margin:0 auto 18px}
+.hist-hero p{font-size:clamp(1.05rem,2vw,1.25rem);color:var(--muted);max-width:560px;margin:0 auto}
+.clouds{display:flex;justify-content:center;gap:14px;margin-top:44px}
+.cloud{width:46px;height:28px;border-radius:999px;position:relative;opacity:.9}
+.cloud::before{content:"";position:absolute;width:26px;height:26px;border-radius:50%;background:inherit;top:-12px;left:10px}
+.cl1{background:var(--c1)}.cl2{background:var(--c2)}.cl3{background:var(--c3)}
+.cl4{background:var(--c4)}.cl5{background:var(--c5)}.cl6{background:var(--c6)}
+
+/* ---------- blocos ---------- */
+.hist-bloco{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:56px 0;border-top:1px solid var(--lilac);align-items:start}
+.hist-bloco.sem-borda{border-top:none}
+.bloco-label{font-weight:700;font-size:1rem;color:var(--kin);position:relative;padding-top:14px;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.04em}
+.bloco-label::before{content:"";position:absolute;top:0;left:0;width:42px;height:6px;border-radius:4px;background:var(--via)}
+.bloco-conteudo h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:14px}
+.bloco-conteudo p{font-size:1.05rem;color:var(--muted);margin-bottom:14px;max-width:640px;text-align:justify;text-justify:inter-word;hyphens:auto}
+@media(max-width:760px){.bloco-conteudo p{text-align:left;hyphens:none}}
+.bloco-conteudo p:last-child{margin-bottom:0}
+.destaque-frase{font-weight:700;color:var(--ink)}
+
+/* ---------- seção do nome ---------- */
+.nome-section{background:var(--cream2);border-radius:var(--radius);padding:64px 48px;margin:24px 0;text-align:center}
+.nome-section .eyebrow{background:var(--white)}
+.nome-section h2{font-size:clamp(1.6rem,3.4vw,2.4rem);margin-bottom:40px}
+.nome-split{display:flex;justify-content:center;align-items:stretch;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.nome-card{background:var(--white);border-radius:22px;padding:32px 36px;min-width:240px;flex:1;max-width:340px;box-shadow:var(--clay)}
+.nome-card .palavra{font-family:'Fraunces',serif;font-weight:650;font-size:2.75rem;line-height:1;margin-bottom:10px}
+.nome-card.kin .palavra{color:var(--kin)}
+.nome-card.via .palavra{color:var(--via)}
+.nome-card .significado{font-weight:700;font-size:1.05rem;color:var(--ink);margin-bottom:6px}
+.nome-card .origem{font-size:.95rem;color:var(--muted)}
+.nome-mais{display:flex;align-items:center;font-family:'Fraunces',serif;font-weight:650;font-size:2.1rem;color:var(--muted)}
+.nome-resultado{font-family:'Fraunces',serif;font-weight:650;font-size:clamp(1.9rem,4vw,2.75rem)}
+.nome-resultado .kin-part{color:var(--kin)}
+.nome-resultado .via-part{color:var(--via)}
+.nome-frase{font-size:1.05rem;color:var(--muted);max-width:520px;margin:14px auto 0}
+
+/* ---------- fechamento ---------- */
+.hist-fechamento{background:var(--petrol);border-radius:var(--radius);text-align:center;padding:80px 32px;margin:56px 0 96px;position:relative;overflow:hidden}
+.hist-fechamento .clouds{margin:0 0 32px}
+.hist-fechamento .cloud{opacity:.85}
+.hist-fechamento h2{font-size:clamp(1.75rem,4vw,2.75rem);color:var(--petrol-text);line-height:1.3;max-width:640px;margin:0 auto 14px}
+.hist-fechamento h2 .coral{color:#F0A07E}
+.hist-fechamento p{color:#A9C2BC;font-size:1.1rem;margin-bottom:36px}
+
+/* ---------- footer ---------- */
+footer{padding:0 0 46px;color:var(--muted);font-size:.88rem}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.foot a{color:var(--kin);text-decoration:none;font-weight:600;margin-left:18px}
+
+/* ---------- responsivo ---------- */
+@media(max-width:760px){
+  .hist-bloco{grid-template-columns:1fr;gap:18px;padding:44px 0}
+  .bloco-label{padding-top:12px}
+  .nome-section{padding:48px 24px}
+  .nome-mais{justify-content:center;width:100%}
+  .nome-card{max-width:100%}
+  .nav-right a.lnk{display:none}
+  .hist-hero{padding-top:140px}
+}
+</style>
+</head>
+<body>
+
+<header class="topo" id="hdr">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="k">Kin</span><span class="v">via</span></a>
+    <nav class="nav-right">
+      <a class="lnk" href="index.html#como-funciona">Como funciona</a>
+      <a class="lnk" href="index.html#planos">Planos</a>
+      <a class="btn btn-sm" href="index.html#lista">Entrar na lista</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hist-hero">
+    <span class="eyebrow">A história</span>
+    <h1>Tudo começou com a Olívia.</h1>
+    <p>Ela chegou em janeiro de 2026. E, junto com ela, chegou também um mundo novo: lindo, intenso e cheio de perguntas que a gente ainda não sabia responder.</p>
+    <div class="clouds" aria-hidden="true">
+      <span class="cloud cl1"></span><span class="cloud cl2"></span><span class="cloud cl3"></span>
+      <span class="cloud cl4"></span><span class="cloud cl5"></span><span class="cloud cl6"></span>
+    </div>
+  </section>
+
+  <!-- O COMEÇO -->
+  <section class="hist-bloco sem-borda reveal">
+    <div class="bloco-label">O começo</div>
+    <div class="bloco-conteudo">
+      <h2>Tudo era novo, tudo parecia incerto</h2>
+      <p>A Olívia nasceu em janeiro. Na primeira semana em casa, a gente começou a perceber que cuidar de um bebê não era só amor, presença e dedicação. Era também tentar entender sinais, horários, intervalos e uma rotina que ainda estava sendo construída.</p>
+      <p>A gente se perguntava o tempo todo: será que já está na hora da próxima mamada? Quanto tempo passou desde a última vez? Será que ela está com fome, sono ou apenas desconfortável?</p>
+      <p>E, no meio do cansaço, uma coisa ficava cada vez mais clara: <span class="destaque-frase">tentar lembrar tudo de cabeça não funcionava.</span></p>
+    </div>
+  </section>
+
+  <!-- A VIRADA -->
+  <section class="hist-bloco reveal">
+    <div class="bloco-label">A virada</div>
+    <div class="bloco-conteudo">
+      <h2>Quando percebemos que rotina também precisa de clareza</h2>
+      <p>O sono foi um dos maiores desafios. Para nós, as janelas de sono eram algo completamente novo. A gente não sabia exatamente quando a Olívia precisava dormir, quanto tempo ela conseguia ficar acordada ou em que momento já estava passando do ponto.</p>
+      <p>E quando esse horário escapava, tudo ficava mais difícil. Ela ficava mais irritada, a noite pesava mais, as tentativas aumentavam e a rotina parecia não encaixar.</p>
+      <p>Foi nesse processo que entendemos: não bastava cuidar com amor. <span class="destaque-frase">A gente precisava enxergar o padrão.</span> Precisava registrar, acompanhar e entender melhor o que estava acontecendo no dia a dia.</p>
+      <p>Foi assim que nasceu a Kinvia.</p>
+    </div>
+  </section>
+
+  <!-- O NOME -->
+  <section class="nome-section reveal">
+    <span class="eyebrow">O nome</span>
+    <h2>Por que Kinvia?</h2>
+    <div class="nome-split">
+      <div class="nome-card kin">
+        <div class="palavra">Kin</div>
+        <div class="significado">Família</div>
+        <div class="origem">Kin vem de família, laços e rede de cuidado.</div>
+      </div>
+      <div class="nome-mais" aria-hidden="true">+</div>
+      <div class="nome-card via">
+        <div class="palavra">via</div>
+        <div class="significado">Caminho e Olívia</div>
+        <div class="origem">Via vem de caminho, jornada e também da Olívia, que inspirou tudo isso.</div>
+      </div>
+    </div>
+    <div class="nome-resultado"><span class="kin-part">Kin</span><span class="via-part">via</span></div>
+    <p class="nome-frase">Kinvia é família e Olívia no mesmo nome. Porque foi com ela que tudo começou.</p>
+  </section>
+
+  <!-- HOJE -->
+  <section class="hist-bloco reveal">
+    <div class="bloco-label">Hoje</div>
+    <div class="bloco-conteudo">
+      <h2>Feito por quem vive isso de verdade</h2>
+      <p>A Kinvia nasceu dentro da nossa própria casa, no meio das mamadas, das sonecas, das dúvidas e das tentativas de criar uma rotina mais leve.</p>
+      <p>Ela foi pensada para ajudar mães, pais e cuidadores a registrarem os cuidados do bebê com mais clareza, entenderem melhor os intervalos das mamadas, acompanharem as janelas de sono e perceberem padrões que, no cansaço do dia a dia, muitas vezes passam despercebidos.</p>
+      <p>Mais do que um app, a Kinvia é uma forma de transformar informação espalhada em cuidado organizado. Uma ajuda simples para quem está vivendo uma das fases mais lindas, intensas e desafiadoras da vida.</p>
+    </div>
+  </section>
+
+  <!-- FECHAMENTO -->
+  <section class="hist-fechamento reveal">
+    <div class="clouds" aria-hidden="true">
+      <span class="cloud cl1"></span><span class="cloud cl2"></span><span class="cloud cl3"></span>
+      <span class="cloud cl4"></span><span class="cloud cl5"></span><span class="cloud cl6"></span>
+    </div>
+    <h2>Vocês cuidam do bebê.<br><span class="coral">O Kinvia organiza o resto.</span></h2>
+    <p>Cuide do bebê sem perder o sono.</p>
+    <a class="btn" href="index.html#planos">Conheça o Kinvia</a>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><a class="logo" href="index.html" style="font-size:1.05rem"><span class="k">Kin</span><span class="v">via</span></a> · © 2026 · Feito no Brasil com 💛 e pouco sono.</div>
+    <div>
+      <a href="index.html#planos">Planos</a>
+      <a href="mailto:suporte@kinvia.app">Suporte</a>
+      <a href="https://instagram.com/kinvia" target="_blank" rel="noopener">@kinvia</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* sombra do topo */
+const hdr = document.getElementById('hdr');
+addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 30), {passive:true});
+
+/* reveal ao rolar (?noanim desativa, p/ testes) */
+if (location.search.includes('noanim')) {
+  document.querySelectorAll('.reveal').forEach(el => { el.style.transition = 'none'; el.classList.add('in'); });
+} else {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
+</script>
+
+</body>
+</html>
