@@ -302,21 +302,6 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .func-card h3{font-size:.98rem;color:var(--kin);margin-bottom:4px}
 .func-card p{font-size:.83rem;color:var(--muted);line-height:1.45}
 
-/* ===== Avaliações ===== */
-.aval{padding:100px 0;background:linear-gradient(180deg,#F4ECF7,#EEE5F3)}
-.aval .head{text-align:center;margin-bottom:44px}
-.aval h2{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--kin)}
-.aval .stars-big{font-size:1.5rem;color:#F2A93B;margin:16px 0 6px;letter-spacing:3px}
-.aval .head p{color:var(--muted);font-weight:600}
-.aval-grid{columns:3;column-gap:22px}
-.tcard{break-inside:avoid;background:var(--white);border-radius:20px;padding:24px;margin-bottom:22px;box-shadow:var(--clay)}
-.tcard .st{color:#F2A93B;font-size:.95rem;letter-spacing:2px;margin-bottom:10px}
-.tcard .q{color:var(--ink);font-size:.98rem;margin-bottom:16px}
-.tcard .who{display:flex;align-items:center;gap:11px}
-.tcard .av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:1.05rem;color:#fff;font-weight:700;flex:none}
-.tcard .who .n{font-weight:700;font-size:.9rem;color:var(--ink)}
-.tcard .who .r{font-size:.78rem;color:var(--muted)}
-
 /* ===== Planos ===== */
 .pricing{padding:60px 0 100px;background:var(--cream2)}
 .pr-card{background:var(--white);border-radius:36px;box-shadow:var(--clay);padding:56px 48px;text-align:center;position:relative;overflow:hidden;max-width:720px;margin:0 auto}
@@ -377,7 +362,6 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   .ia-copy{text-align:center}
   .ia-copy p,.ia-copy .disc{margin-left:auto;margin-right:auto}
   .func-grid{grid-template-columns:repeat(2,1fr)}
-  .aval-grid{columns:1;max-width:520px;margin:0 auto}
   .pr-card{padding:44px 24px}
   .nav-burger{display:flex}
   .nav-links{position:absolute;top:80px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--cream);box-shadow:0 14px 26px rgba(124,106,138,.16);border-top:1px solid rgba(124,106,138,.1);padding:6px 0;max-height:0;overflow:hidden;transition:max-height .3s ease}
@@ -412,7 +396,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
         <a class="lnk" href="#kinvia-ia">Kinvia IA</a>
         <a class="lnk" href="#planos">Planos</a>
       </nav>
-      <a class="btn btn-sm" href="#lista">Entrar na lista</a>
+      <a class="btn btn-sm" href="#lista">Quero acesso antecipado</a>
       <button class="nav-burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -428,13 +412,13 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
     <div class="hero-grid">
       <div class="hero-copy">
         <span class="kicker">☁️ App brasileiro · rotina do bebê</span>
-        <h1>A hora certa do soninho, <em>sem adivinhar.</em></h1>
-        <p class="lead">A Kinvia aprende o ritmo do seu bebê com o que você registra, e avisa quando a janela de sono abre, antes do choro de cansaço. Em português, com acolhimento e sem julgamento.</p>
+        <h1>Adivinhar a hora do soninho cansa. <em>A Kinvia avisa.</em></h1>
+        <p class="lead">Você registra o dia do bebê em segundos. A Kinvia aprende o ritmo dele e avisa quando a janela de sono abre, antes do choro de cansaço. Em português, com acolhimento e sem julgamento.</p>
         <div class="hero-cta">
-          <a class="btn" href="#lista">Entrar na lista de espera</a>
+          <a class="btn" href="#lista">Quero acesso antecipado</a>
           <a class="btn btn-ghost" href="#como-funciona">Ver como funciona</a>
         </div>
-        <p class="micro"><span class="st">★★★★★</span> Feito por pais brasileiros · Começa grátis · Cancele quando quiser</p>
+        <p class="micro">Feito por pais brasileiros · Grátis no lançamento para quem está na lista</p>
       </div>
       <div class="hero-media">
         <!-- Tela real do app no hero (linha do tempo do dia). Para trocar, substitua telas/dia.jpg -->
@@ -589,28 +573,12 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   </div>
 </section>
 
-<!-- ===== Avaliações ===== -->
-<section class="aval" id="avaliacoes">
-  <div class="wrap">
-    <div class="head">
-      <h2>Famílias que pararam de anotar em bilhetinho</h2>
-      <div class="stars-big">★★★★★</div>
-      <p>O que mães e pais dizem depois de organizar a rotina na Kinvia</p>
-    </div>
-    <div class="aval-grid">
-      <div class="tcard"><div class="st">★★★★★</div><p class="q">"Larguei os bilhetinhos na geladeira. Agora eu e meu marido vemos a mesma rotina da Aurora, cada um no seu celular."</p><div class="who"><span class="av" style="background:var(--c-coral)">M</span><div><div class="n">Marina</div><div class="r">mãe da Aurora</div></div></div></div>
-      <div class="tcard"><div class="st">★★★★★</div><p class="q">"O registro por voz salvou minhas madrugadas. Falo 'mamou 100 ml' e volto a dormir, sem acender luz nenhuma."</p><div class="who"><span class="av" style="background:var(--c-lilas)">C</span><div><div class="n">Carla</div><div class="r">mãe do Theo</div></div></div></div>
-      <div class="tcard"><div class="st">★★★★★</div><p class="q">"As janelas de sono me ajudaram a antecipar o cansaço. O clima em casa ficou bem mais leve."</p><div class="who"><span class="av" style="background:var(--c-amarelo)">R</span><div><div class="n">Renata</div><div class="r">mãe da Liz</div></div></div></div>
-    </div>
-  </div>
-</section>
-
 <!-- ===== Planos ===== -->
 <section class="pricing" id="planos">
   <div class="wrap">
     <div class="pr-card">
       <h2>Este é o preço de lançamento.</h2>
-      <p class="sub">Entre na lista agora e garanta este valor de fundador, com 1 mês grátis quando a Kinvia chegar às lojas.</p>
+      <p class="sub">Garanta agora seu acesso antecipado com este valor de fundador, e 1 mês grátis quando a Kinvia chegar às lojas.</p>
       <div class="seg" id="seg">
         <button data-p="mensal">Mensal</button>
         <button data-p="trimestral">Trimestral</button>
@@ -622,13 +590,13 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
       <p class="cobr" id="pCobr">cobrado R$ 262,80 uma vez ao ano · dá R$ 0,72 por dia</p>
       <p class="econ" id="pEcon">você economiza R$ 336,00 por ano</p>
       <p class="founder">🎁 <b>Preço de fundador:</b> quem entra na lista agora garante este valor e ganha <b>1 mês grátis</b> no lançamento.</p>
-      <div class="cta"><a class="btn" style="padding:17px 42px;font-size:1.1rem" href="#lista">Entrar na lista · 1 mês grátis</a></div>
+      <div class="cta"><a class="btn" style="padding:17px 42px;font-size:1.1rem" href="#lista">Quero acesso antecipado · 1 mês grátis</a></div>
       <p class="micro">sem fidelidade · seus dados são seus, sempre</p>
       <div class="inclui">
         <span>🎤 Registro por voz</span><span>💉 Vacinas com lembrete</span><span>📄 PDF para o pediatra</span><span>📈 Curvas OMS</span><span>👨‍👩‍👧 Família sincronizada</span><span>✨ Kinvia IA</span>
       </div>
     </div>
-    <p class="free-line">Vai ter plano grátis para sempre, com os registros essenciais e sem cartão. <a href="#lista">Entre na lista</a> e a gente te avisa quando abrir.</p>
+    <p class="free-line">Vai ter plano grátis para sempre, com os registros essenciais e sem cartão. <a href="#lista">Garanta seu acesso antecipado</a> e a gente te avisa quando abrir.</p>
   </div>
 </section>
 
@@ -637,7 +605,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   <div class="wrap">
     <h2>Perguntas rápidas</h2>
     <div class="faq-list">
-      <details><summary>Quando a Kinvia fica disponível nas lojas?</summary><div class="a">Estamos nos ajustes finais. Entre na lista de espera e você é avisada em primeira mão quando o app chegar à App Store e ao Google Play, com 1 mês grátis de Premium garantido por ter chegado cedo.</div></details>
+      <details><summary>Quando a Kinvia fica disponível nas lojas?</summary><div class="a">Estamos nos ajustes finais. Garanta seu acesso antecipado e você é avisada em primeira mão quando o app chegar à App Store e ao Google Play, com 1 mês grátis de Premium garantido por ter chegado cedo.</div></details>
       <details><summary>E se eu quiser só o plano grátis?</summary><div class="a">Ele é grátis para sempre, com os registros essenciais (mamada, sono, fralda e banho) para 1 bebê. Sem cartão, sem prazo.</div></details>
       <details><summary>Outras pessoas podem usar junto?</summary><div class="a">Sim. No Premium você convida quem cuida com você, pai, mãe, avós, e tudo sincroniza em tempo real. Funciona com mais de um bebê.</div></details>
       <details><summary>A Kinvia IA substitui o pediatra?</summary><div class="a">Não. A Kinvia IA não substitui pediatra, diagnóstico, prescrição ou orientação médica. Ela apoia a organização da rotina e ajuda a família a enxergar padrões a partir dos dados registrados.</div></details>
@@ -750,7 +718,7 @@ addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30),{passi
 /* reveal suave ao rolar (?noanim na URL desativa, p/ testes) */
 (function(){
   if(location.search.includes('noanim')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const els=document.querySelectorAll('.hero-copy,.hero-media,.dor .head,.dor-card,.dor-turn,.sc-head,.step,.video-frame,.hist .inner,.ia-copy,.ia-app,.extra .head,.pills,.aval .head,.tcard,.pr-card,.free-line,.faq h2,.faq-list,.final .box');
+  const els=document.querySelectorAll('.hero-copy,.hero-media,.dor .head,.dor-card,.dor-turn,.sc-head,.step,.video-frame,.hist .inner,.ia-copy,.ia-app,.extra .head,.pills,.pr-card,.free-line,.faq h2,.faq-list,.final .box');
   els.forEach(el=>el.classList.add('reveal'));
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   els.forEach(el=>io.observe(el));
@@ -781,7 +749,7 @@ if(seg)seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b
     panel.hidden=true;ok.hidden=false;
     if(nome)document.getElementById('okTitulo').textContent='Pronto, '+nome+'! Você está na lista.';
     const url=location.origin+location.pathname;
-    const txt='Ei! Entrei na lista de espera da Kinvia, um app brasileiro que organiza a rotina do bebê. Quem entra agora ganha 1 mês grátis no lançamento: '+url;
+    const txt='Ei! Garanti meu acesso antecipado à Kinvia, um app brasileiro que organiza a rotina do bebê. Quem entra agora ganha 1 mês grátis no lançamento: '+url;
     document.getElementById('waShare').href='https://wa.me/?text='+encodeURIComponent(txt);
     try{localStorage.setItem('kv_lista_nome',nome||'')}catch(e){}
   }
