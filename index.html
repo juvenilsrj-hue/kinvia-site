@@ -212,15 +212,15 @@ header.scrolled{background:rgba(251,246,236,.9);backdrop-filter:blur(12px);box-s
 .ig-btn:hover{transform:translateY(-2px)}
 .ig-btn svg{width:23px;height:23px}
 footer{padding:40px 0 46px;color:var(--muted);font-size:.9rem}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
-.foot a{color:var(--kin);text-decoration:none;font-weight:600;margin-left:18px}
-.foot>div{flex:1;min-width:230px}
+.foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
+.foot a{color:var(--kin);text-decoration:none;font-weight:600}
+.foot-links a{margin-left:18px}
 .foot-copy,.foot-follow{font-size:.9rem;line-height:1.65;color:var(--muted)}
-.foot-col-social{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.foot-copy{text-align:center}
-.foot-links{text-align:right}
+.foot-col-social{display:flex;flex-direction:column;align-items:flex-start;gap:9px;justify-self:start}
+.foot-copy{text-align:center;justify-self:center;white-space:nowrap}
+.foot-links{text-align:right;justify-self:end}
 .foot-social{display:flex;align-items:center;gap:9px}
-@media(max-width:960px){.foot{flex-direction:column;align-items:center;gap:16px}.foot-col-social{align-items:center}.foot-copy{white-space:normal!important}.foot-links{text-align:center}.foot-links a{margin:0 9px}}
+@media(max-width:900px){.foot{grid-template-columns:1fr;justify-items:center;gap:18px}.foot-col-social{align-items:center}.foot-copy{white-space:normal}.foot-links{text-align:center}.foot-links a{margin:0 9px}}
 .foot-social a{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;margin-left:0;transition:transform .15s;box-shadow:0 6px 14px rgba(124,106,138,.18)}
 .foot-social a:hover{transform:translateY(-2px)}
 .foot-social a svg{width:18px;height:18px}
