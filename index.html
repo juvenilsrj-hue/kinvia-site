@@ -60,6 +60,7 @@ header.scrolled{background:rgba(251,246,236,.9);backdrop-filter:blur(12px);box-s
 .btn:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(213,130,106,.44)}
 .btn-ghost{background:var(--white);color:var(--kin);box-shadow:0 8px 22px rgba(124,106,138,.12)}
 .btn-sm{padding:11px 22px;font-size:.92rem}
+.cta-sm{display:none}
 
 /* ===== hero ===== */
 .hero{position:relative;padding:150px 0 90px;overflow:hidden}
@@ -68,7 +69,7 @@ header.scrolled{background:rgba(251,246,236,.9);backdrop-filter:blur(12px);box-s
 .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:50px;align-items:center}
 .kicker{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.82rem;letter-spacing:.02em;color:var(--via-dark);background:#FBE3D4;border-radius:999px;padding:8px 16px;margin-bottom:24px}
 .hero h1{font-size:clamp(2.9rem,6vw,5rem);color:var(--kin);margin-bottom:22px}
-.hero h1 em{font-style:normal;color:var(--via)}
+.hero h1 em{font-style:italic;color:var(--via)}
 .hero .lead{font-size:clamp(1.05rem,1.5vw,1.22rem);color:var(--muted);max-width:500px;margin-bottom:18px}
 .hero .lead.last{margin-bottom:34px}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
@@ -350,12 +351,17 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
 /* ===== responsivo ===== */
 @media(max-width:900px){
   .dor-grid{grid-template-columns:1fr}
-  .ia-grid{grid-template-columns:1fr;gap:40px}
+  .ia-grid{grid-template-columns:minmax(0,1fr);gap:40px}
+  .ia-copy,.ia-app{min-width:0;max-width:100%}
   .ia-copy{text-align:center}
   .ia-copy p,.ia-copy .disc{margin-left:auto;margin-right:auto}
   .func-grid{grid-template-columns:repeat(2,1fr)}
   .pr-card{padding:44px 24px}
   .nav-burger{display:flex}
+  .nav-right{gap:10px}
+  .nav-right .btn-sm{padding:9px 15px;font-size:.8rem;white-space:nowrap}
+  .cta-lg{display:none}
+  .cta-sm{display:inline}
   .nav-links{position:absolute;top:80px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--cream);box-shadow:0 14px 26px rgba(124,106,138,.16);border-top:1px solid rgba(124,106,138,.1);padding:6px 0;max-height:0;overflow:hidden;transition:max-height .3s ease}
   .nav-links.open{max-height:340px}
   .nav-links a.lnk{display:block;padding:15px 26px;font-size:1.05rem;opacity:1}
@@ -388,7 +394,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
         <a class="lnk" href="#kinvia-ia">Kinvia IA</a>
         <a class="lnk" href="#planos">O que você garante</a>
       </nav>
-      <a class="btn btn-sm" href="#lista">Quero acesso antecipado</a>
+      <a class="btn btn-sm" href="#lista"><span class="cta-lg">Quero acesso antecipado</span><span class="cta-sm">Acesso antecipado</span></a>
       <button class="nav-burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
