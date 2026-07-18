@@ -111,6 +111,21 @@
   .env-erro{font-size:.72rem;color:var(--crit);font-weight:700;display:block;margin-top:3px}
   .aviso{display:flex;gap:10px;align-items:flex-start;background:var(--wait-bg);border:1px solid rgba(176,132,58,.3);border-radius:13px;padding:13px 16px;margin-bottom:18px;font-size:.85rem;color:#7a5a2f}
   .aviso b{color:#6a4d28}
+  .ver{display:block;margin-top:6px;background:none;border:0;padding:0;cursor:pointer;font-family:inherit;font-size:.75rem;font-weight:700;color:var(--kin);text-decoration:underline;text-underline-offset:3px}
+  .ver:hover{color:var(--via-dark)}
+
+  /* janela de pré-visualização */
+  .modal{position:fixed;inset:0;z-index:900;background:rgba(50,38,32,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+  .modal-card{width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;background:var(--panel);border-radius:20px;overflow:hidden;box-shadow:0 24px 70px rgba(60,40,30,.35)}
+  .modal-top{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .modal-top h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;margin-bottom:4px}
+  .modal-meta{font-size:.78rem;color:var(--muted);line-height:1.7}
+  .modal-meta b{color:var(--ink)}
+  .modal-x{border:0;background:var(--cream2);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;color:var(--muted);flex:none}
+  .modal-corpo{flex:1;overflow:auto;background:#FBF6EC}
+  .modal-corpo iframe{width:100%;height:640px;border:0;display:block}
+  .modal-pe{padding:14px 20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .modal-nota{font-size:.76rem;color:var(--muted);flex:1;min-width:180px}
   .nota{font-size:.77rem;color:var(--muted);line-height:1.6;margin-top:6px}
   .loading{padding:60px 20px;text-align:center;color:var(--muted)}
   @media(max-width:560px){.wrap{padding:20px 13px 40px}}
@@ -274,11 +289,11 @@ function render(d) {
 
     <div class="pane" id="p-leads">
       <div class="metrics">
-        <div class="metric"><div class="k">Cadastros</div><div class="v">${lm.total ?? 0}</div></div>
-        <div class="metric"><div class="k">Hoje</div><div class="v">${lm.hoje ?? 0}</div></div>
-        <div class="metric"><div class="k">7 dias</div><div class="v">${lm.ult7d ?? 0}</div></div>
-        <div class="metric"><div class="k">iPhone</div><div class="v">${lm.ios ?? 0}</div></div>
-        <div class="metric"><div class="k">Android</div><div class="v">${lm.android ?? 0}</div></div>
+        <div class="metric escuro"><div class="k">Cadastros</div><div class="v">${lm.total ?? 0}</div></div>
+        <div class="metric escuro"><div class="k">Hoje</div><div class="v">${lm.hoje ?? 0}</div></div>
+        <div class="metric escuro"><div class="k">7 dias</div><div class="v">${lm.ult7d ?? 0}</div></div>
+        <div class="metric escuro"><div class="k">iPhone</div><div class="v">${lm.ios ?? 0}</div></div>
+        <div class="metric escuro"><div class="k">Android</div><div class="v">${lm.android ?? 0}</div></div>
         <div class="metric escuro"><div class="k">Mensagens</div><div class="v">${contatos.length}</div></div>
       </div>
       ${d.envioPronto ? '' : '<div class="aviso"><span>⚠️</span><div><b>Os disparos ainda não estão ligados.</b> Falta cadastrar a chave do Resend. Os botões abaixo já funcionam, mas o e-mail fica na fila até a chave ser configurada.</div></div>'}
@@ -327,6 +342,7 @@ function render(d) {
   `;
 
   document.querySelectorAll('.disp[data-acao]').forEach(b => b.addEventListener('click', () => disparar(b)));
+  document.querySelectorAll('.ver[data-ver]').forEach(b => b.addEventListener('click', () => verEmail(b.dataset.email, b.dataset.ver)));
 
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
@@ -350,7 +366,51 @@ function botaoEnvio(p, acao) {
       : env.status === 'erro' ? `<span class="env-erro">✕ falhou, tente de novo</span>`
       : `<span class="env-erro">na fila</span>`)
     : '';
-  return `<button class="disp${jaFoi ? ' reenviar' : ''}" data-acao="${acao}" data-email="${esc(p.email)}" data-nome="${esc(p.nome || '')}">${rotulo}</button>${marca}`;
+  return `<button class="disp${jaFoi ? ' reenviar' : ''}" data-acao="${acao}" data-email="${esc(p.email)}" data-nome="${esc(p.nome || '')}">${rotulo}</button>${marca}`
+    + `<button class="ver" data-ver="${acao}" data-email="${esc(p.email)}">👁 Ver o e-mail</button>`;
+}
+
+/* ---------- pré-visualização ---------- */
+async function verEmail(email, acao) {
+  const { data, error } = await sb.rpc('kv_admin_previa', { p_email: email, p_acao: acao });
+  if (error) { alert('Não consegui montar a prévia: ' + error.message); return; }
+  const bg = document.createElement('div');
+  bg.className = 'modal';
+  bg.innerHTML = `
+    <div class="modal-card">
+      <div class="modal-top">
+        <div>
+          <h3>É isto que a pessoa vai receber</h3>
+          <div class="modal-meta">
+            <b>Para:</b> ${esc(data.para)}<br>
+            <b>De:</b> ${esc(data.de)}<br>
+            <b>Assunto:</b> ${esc(data.assunto)}
+          </div>
+        </div>
+        <button class="modal-x" title="Fechar">✕</button>
+      </div>
+      <div class="modal-corpo"></div>
+      <div class="modal-pe">
+        <div class="modal-nota">${data.senhaExemplo
+          ? 'A senha mostrada aqui é só exemplo. No envio real o sistema sorteia uma senha nova e é ela que vai no e-mail.'
+          : 'Esta pessoa já usa o app, então o e-mail não leva senha e a dela continua a mesma.'}
+          <br>Sem anexos: o próprio e-mail é o cartão.</div>
+        <button class="disp" data-enviar="1">Enviar agora</button>
+      </div>
+    </div>`;
+  const quadro = document.createElement('iframe');
+  quadro.setAttribute('sandbox', '');          // conteúdo isolado, sem scripts
+  quadro.srcdoc = data.html;                   // definido antes de entrar na tela
+  bg.querySelector('.modal-corpo').appendChild(quadro);
+  document.body.appendChild(bg);
+  const fechar = () => bg.remove();
+  bg.querySelector('.modal-x').addEventListener('click', fechar);
+  bg.addEventListener('click', e => { if (e.target === bg) fechar(); });
+  bg.querySelector('[data-enviar]').addEventListener('click', () => {
+    fechar();
+    const alvo = document.querySelector(`.disp[data-acao="${acao}"][data-email="${email}"]`);
+    if (alvo) disparar(alvo);
+  });
 }
 
 async function disparar(btn) {
