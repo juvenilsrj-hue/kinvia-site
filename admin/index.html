@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Kinvia · Painel administrativo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6EC;--cream2:#F5EDDC;--panel:#FFFDF9;
+    --kin:#7C6A8A;--via:#D5826A;--via-dark:#C06B52;--ink:#453831;--muted:#94816F;
+    --line:rgba(124,106,138,.16);
+    --ok:#2E9E6B;--ok-bg:#E6F4EC;--wait:#B0843A;--wait-bg:#F6ECD9;
+    --info:#3A6EA5;--info-bg:#E5EEF6;--crit:#C0453A;
+    --perd:#94816F;--perd-bg:rgba(148,129,111,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:26px 18px 60px}
+  .logo{font-family:'Fraunces',serif;font-weight:650;font-size:1.45rem;letter-spacing:-.02em}
+  .logo b{color:var(--kin)}.logo i{color:var(--via);font-style:normal}
+
+  /* ===== login ===== */
+  .login{min-height:100vh;display:grid;place-items:center;padding:24px}
+  .login-card{width:100%;max-width:370px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:34px 30px;box-shadow:0 18px 50px rgba(120,90,60,.09);text-align:center}
+  .login-card h1{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;margin:18px 0 4px}
+  .login-card p.sub{font-size:.85rem;color:var(--muted);margin-bottom:22px}
+  .fld{text-align:left;margin-bottom:12px}
+  .fld label{display:block;font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+  input{width:100%;border:2px solid #F0E7D8;border-radius:13px;padding:12px 14px;font-size:.98rem;font-family:inherit;background:var(--cream);color:var(--ink);transition:border-color .15s}
+  input:focus{outline:none;border-color:var(--via)}
+  .btn{width:100%;border:0;cursor:pointer;border-radius:14px;padding:14px;font-weight:800;font-size:.98rem;font-family:inherit;color:#fff;background:linear-gradient(145deg,var(--via),var(--via-dark));box-shadow:0 6px 16px rgba(213,130,106,.32);transition:transform .1s,opacity .15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:disabled{opacity:.6;cursor:wait;transform:none}
+  .msg{font-size:.83rem;margin-top:12px;min-height:18px;color:var(--crit);font-weight:600}
+  .msg.ok{color:var(--ok)}
+
+  /* ===== topo ===== */
+  .top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .top .who{font-size:.78rem;color:var(--muted)}
+  .acts{display:flex;gap:8px;align-items:center}
+  .mini{border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:inherit;font-weight:700;font-size:.8rem;padding:8px 14px;border-radius:11px;cursor:pointer;transition:background .15s}
+  .mini:hover{background:var(--cream2)}
+  .mini.pri{background:var(--kin);color:#fff;border-color:var(--kin)}
+
+  /* ===== métricas ===== */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:11px;margin-bottom:22px}
+  .metric{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 15px}
+  .metric .k{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .metric .v{font-family:'Fraunces',serif;font-weight:600;font-size:1.75rem;color:var(--kin);margin-top:3px;font-variant-numeric:tabular-nums}
+  .metric .v small{font-size:.8rem;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600}
+
+  /* ===== abas ===== */
+  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+  .tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);font-family:inherit;font-weight:700;font-size:.85rem;padding:9px 16px;border-radius:11px;cursor:pointer;transition:all .15s}
+  .tab:hover{color:var(--ink)}
+  .tab.on{background:var(--kin);color:#fff;border-color:var(--kin)}
+  .pane{display:none}
+  .pane.on{display:block}
+
+  /* ===== tabelas ===== */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow-x:auto;margin-bottom:18px}
+  table{width:100%;border-collapse:collapse;font-size:.87rem;min-width:640px}
+  th{text-align:left;font-size:.69rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th.num,td.num{text-align:center}
+  td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  .who-cel b{font-weight:700}
+  .who-cel small{display:block;color:var(--muted);font-size:.74rem;word-break:break-all}
+  .num{font-variant-numeric:tabular-nums}
+  .when{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap;font-size:.83rem}
+  .pill{display:inline-flex;align-items:center;font-size:.73rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .pill.ok{background:var(--ok-bg);color:var(--ok)}
+  .pill.wait{background:var(--wait-bg);color:var(--wait)}
+  .pill.info{background:var(--info-bg);color:var(--info)}
+  .pill.perd{background:var(--perd-bg);color:var(--perd)}
+  .id{font-family:'Fraunces',serif;font-weight:700;color:var(--via-dark)}
+  .dias.crit{color:var(--crit);font-weight:700}
+  .sec{font-family:'Fraunces',serif;font-weight:600;font-size:1.02rem;margin:0 0 9px}
+  .bars{padding:5px 4px}
+  .brow{display:flex;align-items:center;gap:11px;padding:10px 13px;border-bottom:1px solid var(--line)}
+  .brow:last-child{border-bottom:0}
+  .brow .nm{font-weight:700;min-width:112px;flex:none;font-size:.86rem}
+  .bar{flex:1;height:8px;background:rgba(124,106,138,.12);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--via),var(--via-dark));border-radius:99px}
+  .brow .ct{font-variant-numeric:tabular-nums;font-weight:700;color:var(--kin);min-width:30px;text-align:right}
+  .vazio{padding:26px 16px;text-align:center;color:var(--muted);font-size:.87rem}
+  .nota{font-size:.77rem;color:var(--muted);line-height:1.6;margin-top:6px}
+  .loading{padding:60px 20px;text-align:center;color:var(--muted)}
+  @media(max-width:560px){.wrap{padding:20px 13px 40px}}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div class="login" id="telaLogin">
+  <div class="login-card">
+    <div class="logo"><b>Kin</b><i>via</i></div>
+    <h1>Painel administrativo</h1>
+    <p class="sub">Área restrita. Entre com sua conta de administrador.</p>
+    <form id="formLogin">
+      <div class="fld">
+        <label for="em">E-mail</label>
+        <input id="em" type="email" autocomplete="username" required>
+      </div>
+      <div class="fld">
+        <label for="pw">Senha</label>
+        <input id="pw" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn" id="btnEntrar" type="submit">Entrar</button>
+    </form>
+    <div class="msg" id="msgLogin"></div>
+  </div>
+</div>
+
+<!-- ===== PAINEL ===== -->
+<div class="wrap" id="telaPainel" style="display:none">
+  <div class="top">
+    <div>
+      <div class="logo"><b>Kin</b><i>via</i></div>
+      <div class="who" id="rodapeUser"></div>
+    </div>
+    <div class="acts">
+      <button class="mini pri" id="btnAtualizar">Atualizar</button>
+      <button class="mini" id="btnSair">Sair</button>
+    </div>
+  </div>
+
+  <div id="conteudo"><div class="loading">Carregando os dados…</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL = 'https://fzsksitqokoxzjfibitg.supabase.co';
+const SB_KEY = 'sb_publishable_aJbuOSFLHu5iDAH979ZPtQ_YpIGTG7q';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+const $ = id => document.getElementById(id);
+const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const NOMES = {sono:'😴 Sono', mama:'🍼 Mamada', fralda:'🧷 Fralda', banho:'🛁 Banho', remedio:'💊 Remédio',
+  vacina:'💉 Vacina', marco:'🌟 Marco', humor:'😊 Humor', arroto:'💨 Arroto', alim:'🥄 Alimentação', febre:'🌡️ Febre'};
+
+/* ---------- login ---------- */
+$('formLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const b = $('btnEntrar'); b.disabled = true; msg('Entrando…', true);
+  const { error } = await sb.auth.signInWithPassword({ email: $('em').value.trim(), password: $('pw').value });
+  b.disabled = false;
+  if (error) { msg(traduz(error.message)); return; }
+  msg('');
+  abrirPainel();
+});
+
+function msg(t, ok) { const m = $('msgLogin'); m.textContent = t || ''; m.className = 'msg' + (ok ? ' ok' : ''); }
+function traduz(m) {
+  if (/invalid login|credential/i.test(m)) return 'E-mail ou senha incorretos.';
+  if (/not confirmed/i.test(m)) return 'Confirme seu e-mail antes de entrar.';
+  if (/rate limit|too many/i.test(m)) return 'Muitas tentativas. Aguarde um instante.';
+  return m || 'Não foi possível entrar.';
+}
+
+$('btnSair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+$('btnAtualizar').addEventListener('click', () => carregar(true));
+
+async function abrirPainel() {
+  $('telaLogin').style.display = 'none';
+  $('telaPainel').style.display = 'block';
+  const { data: { user } } = await sb.auth.getUser();
+  $('rodapeUser').textContent = user ? user.email : '';
+  carregar();
+}
+
+/* ---------- dados ---------- */
+async function carregar(recarregando) {
+  if (recarregando) $('conteudo').innerHTML = '<div class="loading">Atualizando…</div>';
+  const { data, error } = await sb.rpc('kv_admin_overview');
+  if (error) {
+    const negado = /acesso negado|permission|denied/i.test(error.message || '');
+    $('conteudo').innerHTML = '<div class="card"><div class="vazio">' +
+      (negado
+        ? '<b>Esta conta não tem acesso ao painel.</b><br>Se você deveria ter acesso, peça para incluírem seu e-mail na lista de administradores.'
+        : 'Não foi possível carregar os dados: ' + esc(error.message)) +
+      '</div></div>';
+    return;
+  }
+  render(data);
+}
+
+function render(d) {
+  const m = d.metricas || {}, lm = d.leadsMetricas || {};
+  const participantes = d.participantes || [], leads = d.leads || [], churn = d.churn || [],
+        top = d.top || [], contatos = d.contatos || [];
+  const maxTop = top.length ? Math.max(...top.map(t => t.n)) : 1;
+  const recuperados = churn.filter(c => c.status === 'recuperado').length;
+  const contatados = churn.filter(c => c.status === 'contatado').length;
+
+  $('conteudo').innerHTML = `
+    <div class="metrics">
+      <div class="metric"><div class="k">Contas</div><div class="v">${m.contas ?? 0}</div></div>
+      <div class="metric"><div class="k">Já entraram</div><div class="v">${m.entraram ?? 0} <small>de ${m.contas ?? 0}</small></div></div>
+      <div class="metric"><div class="k">Ativas (7 dias)</div><div class="v">${m.ativas7d ?? 0}</div></div>
+      <div class="metric"><div class="k">Registros</div><div class="v">${m.registros ?? 0}</div></div>
+      <div class="metric"><div class="k">Lista de espera</div><div class="v">${lm.total ?? 0}</div></div>
+      <div class="metric"><div class="k">Em retenção</div><div class="v">${churn.length}</div></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" data-p="maes">👶 Mães do beta</button>
+      <button class="tab" data-p="leads">💛 Lista de espera</button>
+      <button class="tab" data-p="churn">🛟 Retenção</button>
+    </div>
+
+    <div class="pane on" id="p-maes">
+      <div class="sec">Itens mais registrados</div>
+      <div class="card"><div class="bars">
+        ${top.length ? top.map((t, i) => `
+          <div class="brow"><div class="nm">${esc(NOMES[t.tipo] || t.tipo)}</div>
+            <div class="bar"><i style="width:${Math.round(t.n / maxTop * 100)}%"></i></div>
+            <div class="ct">${t.n}</div></div>`).join('') : '<div class="vazio">Nenhum registro ainda.</div>'}
+      </div></div>
+      <div class="sec">Participantes (${participantes.length})</div>
+      <div class="card"><table>
+        <thead><tr><th>Pessoa</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th class="num">Bebês</th><th>Premium até</th></tr></thead>
+        <tbody>${participantes.map(p => `
+          <tr>
+            <td class="who-cel"><b>${esc(p.nome)}</b><small>${esc(p.email)}</small></td>
+            <td>${p.entrou ? (p.ativa7d ? '<span class="pill ok">Ativa</span>' : '<span class="pill wait">Parada ' + p.diasInativo + 'd</span>') : '<span class="pill perd">Nunca entrou</span>'}</td>
+            <td class="when">${p.ultAtividade ? esc(p.ultAtividade) : '—'}</td>
+            <td class="num">${p.registros}</td>
+            <td class="num">${p.bebes}</td>
+            <td class="when">${p.sentinela ? '1 mês após ativar' : (p.premiumAte ? esc(p.premiumAte) : '—')}</td>
+          </tr>`).join('')}</tbody>
+      </table></div>
+      <p class="nota">“Ativa” = usou o app nos últimos 7 dias. “1 mês após ativar” = o Premium só começa a contar no primeiro uso.</p>
+    </div>
+
+    <div class="pane" id="p-leads">
+      <div class="metrics">
+        <div class="metric"><div class="k">Cadastros</div><div class="v">${lm.total ?? 0}</div></div>
+        <div class="metric"><div class="k">Hoje</div><div class="v">${lm.hoje ?? 0}</div></div>
+        <div class="metric"><div class="k">7 dias</div><div class="v">${lm.ult7d ?? 0}</div></div>
+        <div class="metric"><div class="k">iPhone</div><div class="v">${lm.ios ?? 0}</div></div>
+        <div class="metric"><div class="k">Android</div><div class="v">${lm.android ?? 0}</div></div>
+        <div class="metric"><div class="k">Mensagens</div><div class="v">${contatos.length}</div></div>
+      </div>
+      <div class="sec">Quem entrou na lista</div>
+      <div class="card">${leads.length ? `<table>
+        <thead><tr><th>Nome</th><th>Plataforma</th><th>Entrou em</th></tr></thead>
+        <tbody>${leads.map(l => `
+          <tr><td class="who-cel"><b>${esc(l.nome)}</b><small>${esc(l.email)}</small></td>
+            <td><span class="pill info">${esc(l.plataforma)}</span></td>
+            <td class="when">${esc(l.quando)}</td></tr>`).join('')}</tbody>
+      </table>` : '<div class="vazio">Nenhum cadastro ainda.</div>'}</div>
+      <div class="sec">Mensagens de contato</div>
+      <div class="card">${contatos.length ? `<table>
+        <thead><tr><th>Quem</th><th>Mensagem</th><th>Quando</th></tr></thead>
+        <tbody>${contatos.map(c => `
+          <tr><td class="who-cel"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></td>
+            <td>${esc(c.mensagem)}</td><td class="when">${esc(c.quando)}</td></tr>`).join('')}</tbody>
+      </table>` : '<div class="vazio">Nenhuma mensagem recebida pelo site até agora.</div>'}</div>
+      <p class="nota">Tráfego do site (visitas) fica no Google Analytics, fluxo Kinvia. Aqui aparecem só os cadastros.</p>
+    </div>
+
+    <div class="pane" id="p-churn">
+      <div class="metrics">
+        <div class="metric"><div class="k">Em risco</div><div class="v">${churn.filter(c => c.status === 'em_risco').length}</div></div>
+        <div class="metric"><div class="k">Contatados</div><div class="v">${contatados}</div></div>
+        <div class="metric"><div class="k">Recuperados</div><div class="v">${recuperados}</div></div>
+      </div>
+      <div class="card">${churn.length ? `<table>
+        <thead><tr><th>ID</th><th>Pessoa</th><th>Segmento</th><th class="num">Dias inativa</th><th class="num">Registros</th><th>Premium até</th><th>Status</th></tr></thead>
+        <tbody>${churn.map(c => `
+          <tr><td class="id">${esc(c.id)}</td>
+            <td class="who-cel"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></td>
+            <td>${c.segmento === 'reativar' ? 'Reativar' : 'Ativar'}</td>
+            <td class="num dias ${c.diasInativo > 7 ? 'crit' : ''}">${c.diasInativo}</td>
+            <td class="num">${c.registros}</td>
+            <td class="when">${c.premiumAte ? esc(c.premiumAte) : '1 mês após ativar'}</td>
+            <td>${statusPill(c.status)}</td></tr>`).join('')}</tbody>
+      </table>` : '<div class="vazio">Ninguém na lista de retenção.</div>'}</div>
+      <p class="nota">Reativar = já usou o app e esfriou. Ativar = nunca fez o primeiro acesso. Para mudar um status, peça no chat do Claude.</p>
+    </div>
+
+    <p class="nota" style="text-align:center;margin-top:22px">Dados ao vivo do banco · gerado em <b>${esc(d.geradoEm)}</b></p>
+  `;
+
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.pane').forEach(x => x.classList.remove('on'));
+    t.classList.add('on');
+    $('p-' + t.dataset.p).classList.add('on');
+  }));
+}
+
+function statusPill(s) {
+  if (s === 'recuperado') return '<span class="pill ok">Recuperada</span>';
+  if (s === 'contatado') return '<span class="pill info">Contatada</span>';
+  if (s === 'perdido') return '<span class="pill perd">Perdida</span>';
+  return '<span class="pill wait">Em risco</span>';
+}
+
+/* ---------- sessão já ativa ---------- */
+sb.auth.getSession().then(({ data }) => { if (data && data.session) abrirPainel(); });
+</script>
+</body>
+</html>

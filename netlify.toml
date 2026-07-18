@@ -9,6 +9,14 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
 
+# painel administrativo: fora dos buscadores e sem cache
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store"
+    Referrer-Policy = "no-referrer"
+
 # HTML sempre revalidado (evita o navegador mostrar versão antiga em cache)
 [[headers]]
   for = "/*.html"
