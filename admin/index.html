@@ -192,14 +192,14 @@ async function carregar(recarregando) {
 function render(d) {
   const m = d.metricas || {}, lm = d.leadsMetricas || {};
   const participantes = d.participantes || [], leads = d.leads || [], churn = d.churn || [],
-        top = d.top || [], contatos = d.contatos || [];
+        top = d.top || [], contatos = d.contatos || [], cuidadores = d.cuidadores || [];
   const maxTop = top.length ? Math.max(...top.map(t => t.n)) : 1;
   const recuperados = churn.filter(c => c.status === 'recuperado').length;
   const contatados = churn.filter(c => c.status === 'contatado').length;
 
   $('conteudo').innerHTML = `
     <div class="metrics">
-      <div class="metric"><div class="k">Contas</div><div class="v">${m.contas ?? 0}</div></div>
+      <div class="metric"><div class="k">Participantes</div><div class="v">${m.contas ?? 0}</div></div>
       <div class="metric"><div class="k">Já entraram</div><div class="v">${m.entraram ?? 0} <small>de ${m.contas ?? 0}</small></div></div>
       <div class="metric"><div class="k">Ativas (7 dias)</div><div class="v">${m.ativas7d ?? 0}</div></div>
       <div class="metric"><div class="k">Registros</div><div class="v">${m.registros ?? 0}</div></div>
@@ -235,6 +235,18 @@ function render(d) {
           </tr>`).join('')}</tbody>
       </table></div>
       <p class="nota">“Ativa” = usou o app nos últimos 7 dias. “1 mês após ativar” = o Premium só começa a contar no primeiro uso.</p>
+
+      <div class="sec" style="margin-top:26px">Co-cuidadores (${cuidadores.length})</div>
+      <div class="card">${cuidadores.length ? `<table>
+        <thead><tr><th>Pessoa</th><th>Cuida da conta de</th><th>Última atividade</th><th>Origem</th></tr></thead>
+        <tbody>${cuidadores.map(c => `
+          <tr><td class="who-cel"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></td>
+            <td class="when">${esc(c.cuidaDe)}</td>
+            <td class="when">${c.ultAtividade ? esc(c.ultAtividade) : '—'}</td>
+            <td>${c.viaConvite ? '<span class="pill info">Convite Família</span>' : '<span class="pill wait">Marcado à mão</span>'}</td>
+          </tr>`).join('')}</tbody>
+      </table>` : '<div class="vazio">Nenhum co-cuidador.</div>'}</div>
+      <p class="nota">São pessoas que acompanham o bebê de outra família (convidadas pela função Família), não participantes do beta. Por isso ficam fora das métricas e da lista acima.</p>
     </div>
 
     <div class="pane" id="p-leads">
