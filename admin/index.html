@@ -240,6 +240,7 @@ function render(d) {
       <div class="metric"><div class="k">Participantes</div><div class="v">${m.contas ?? 0}</div></div>
       <div class="metric"><div class="k">Já entraram</div><div class="v">${m.entraram ?? 0} <small>de ${m.contas ?? 0}</small></div></div>
       <div class="metric"><div class="k">Ativas (7 dias)</div><div class="v">${m.ativas7d ?? 0}</div></div>
+      <div class="metric${(m.paradas72h ?? 0) > 0 ? ' risco' : ''}"><div class="k">Paradas +72h</div><div class="v">${m.paradas72h ?? 0}</div></div>
       <div class="metric"><div class="k">Registros</div><div class="v">${m.registros ?? 0}</div></div>
       <div class="metric"><div class="k">Lista de espera</div><div class="v">${lm.total ?? 0}</div></div>
       <div class="metric"><div class="k">Em retenção</div><div class="v">${churn.length}</div></div>
@@ -261,18 +262,19 @@ function render(d) {
       </div></div>
       <div class="sec">Participantes (${participantes.length})</div>
       <div class="card"><table>
-        <thead><tr><th>Pessoa</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th class="num">Bebês</th><th>Premium até</th></tr></thead>
+        <thead><tr><th>Pessoa</th><th>Bebê</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th>Premium até</th><th>Retomar hábito</th></tr></thead>
         <tbody>${participantes.map(p => `
           <tr>
             <td class="who-cel"><b>${esc(p.nome)}</b><small>${esc(p.email)}</small></td>
+            <td class="when">${p.entrou ? (esc(p.bebeNome || 'sem nome') + (p.bebeIdade ? '<br><small style="color:var(--muted)">' + esc(p.bebeIdade) + '</small>' : '<br><small style="color:var(--crit)">sem data de nasc.</small>')) : '—'}</td>
             <td>${p.entrou ? (p.ativa7d ? '<span class="pill ok">Ativa</span>' : '<span class="pill wait">Parada ' + p.diasInativo + 'd</span>') : '<span class="pill perd">Nunca entrou</span>'}</td>
-            <td class="when">${p.ultAtividade ? esc(p.ultAtividade) : '—'}</td>
+            <td class="when">${p.ultAtividade ? esc(p.ultAtividade) : '—'}${p.horasParado != null && p.horasParado > 72 ? '<br><small style="color:var(--crit);font-weight:700">' + p.horasParado + 'h parada</small>' : ''}</td>
             <td class="num">${p.registros}</td>
-            <td class="num">${p.bebes}</td>
             <td class="when">${p.sentinela ? '1 mês após ativar' : (p.premiumAte ? esc(p.premiumAte) : '—')}</td>
+            <td>${botaoEnvio(p, 'habito')}</td>
           </tr>`).join('')}</tbody>
       </table></div>
-      <p class="nota">“Ativa” = usou o app nos últimos 7 dias. “1 mês após ativar” = o Premium só começa a contar no primeiro uso.</p>
+      <p class="nota">“Ativa” = usou o app nos últimos 7 dias. “1 mês após ativar” = o Premium só começa a contar no primeiro uso.<br>O botão <b>Retomar hábito</b> aparece para quem já entrou mas está sem registrar há mais de 72 horas. A mensagem é personalizada com o nome e a fase do bebê.</p>
 
       <div class="sec" style="margin-top:26px">Co-cuidadores (${cuidadores.length})</div>
       <div class="card">${cuidadores.length ? `<table>
@@ -358,8 +360,14 @@ function botaoEnvio(p, acao) {
   if (acao === 'convite' && p.jaEntrou) {
     return '<button class="disp" disabled title="Já está usando o app">Já ativou</button>';
   }
+  if (acao === 'habito') {
+    if (!p.entrou) return '<button class="disp" disabled title="Ainda não fez o primeiro acesso">Não entrou</button>';
+    if (p.horasParado == null || p.horasParado <= 72)
+      return '<button class="disp" disabled title="Registrou nas últimas 72 horas">Em dia</button>';
+  }
   const jaFoi = env && (env.status === 'enviado' || env.status === 'enviando');
-  const rotulo = jaFoi ? 'Reenviar' : (acao === 'convite' ? 'Disparar convite' : 'Disparar recuperação');
+  const rotulos = { convite: 'Disparar convite', recuperacao: 'Disparar recuperação', habito: 'Retomar hábito' };
+  const rotulo = jaFoi ? 'Reenviar' : rotulos[acao];
   const marca = env
     ? (env.status === 'enviado' ? `<span class="env-ok">✓ enviado ${esc(env.quando)}</span>`
       : env.status === 'enviando' ? `<span class="env-ok">↗ enviando…</span>`
@@ -415,11 +423,13 @@ async function verEmail(email, acao) {
 
 async function disparar(btn) {
   const { acao, email, nome } = btn.dataset;
-  const oQue = acao === 'convite' ? 'o convite de acesso' : 'a mensagem de recuperação';
+  const oQueMapa = { convite: 'o convite de acesso', recuperacao: 'a mensagem de recuperação', habito: 'a mensagem de retomada de hábito' };
+  const oQue = oQueMapa[acao];
   if (!confirm(`Enviar ${oQue} para ${nome || email}?\n\nO e-mail sai para ${email}.`)) return;
   const textoOriginal = btn.textContent;
   btn.disabled = true; btn.classList.add('enviando'); btn.textContent = 'Enviando…';
-  const fn = acao === 'convite' ? 'kv_admin_convite' : 'kv_admin_recuperacao';
+  const fnMapa = { convite: 'kv_admin_convite', recuperacao: 'kv_admin_recuperacao', habito: 'kv_admin_habito' };
+  const fn = fnMapa[acao];
   const { data, error } = await sb.rpc(fn, { p_email: email });
   btn.classList.remove('enviando');
   if (error) { btn.disabled = false; btn.textContent = textoOriginal; alert('Não deu certo: ' + error.message); return; }
