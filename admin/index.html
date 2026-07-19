@@ -37,6 +37,13 @@
   .btn:disabled{opacity:.6;cursor:wait;transform:none}
   .msg{font-size:.83rem;margin-top:12px;min-height:18px;color:var(--crit);font-weight:600}
   .msg.ok{color:var(--ok)}
+  .pw-wrap{position:relative}
+  .pw-wrap input{padding-right:46px}
+  .pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;cursor:pointer;font-size:1.15rem;line-height:1;padding:6px 8px;border-radius:9px;opacity:.55;transition:opacity .15s}
+  .pw-eye:hover{opacity:1}
+  .pw-eye.on{opacity:1}
+  .link-esq{display:block;margin:14px auto 0;background:none;border:0;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--kin);text-decoration:underline;text-underline-offset:3px}
+  .link-esq:hover{color:var(--via-dark)}
 
   /* ===== topo ===== */
   .top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
@@ -146,10 +153,14 @@
       </div>
       <div class="fld">
         <label for="pw">Senha</label>
-        <input id="pw" type="password" autocomplete="current-password" required>
+        <div class="pw-wrap">
+          <input id="pw" type="password" autocomplete="current-password" required>
+          <button type="button" class="pw-eye" id="btnEye" aria-label="Mostrar senha" title="Mostrar senha">👁</button>
+        </div>
       </div>
       <button class="btn" id="btnEntrar" type="submit">Entrar</button>
     </form>
+    <button type="button" class="link-esq" id="btnEsqueci">Esqueci minha senha</button>
     <div class="msg" id="msgLogin"></div>
   </div>
 </div>
@@ -192,12 +203,49 @@ $('formLogin').addEventListener('submit', async e => {
   abrirPainel();
 });
 
+/* mostrar/ocultar senha */
+$('btnEye').addEventListener('click', () => {
+  const pw = $('pw'), eye = $('btnEye');
+  const ver = pw.type === 'password';
+  pw.type = ver ? 'text' : 'password';
+  eye.textContent = ver ? '🙈' : '👁';
+  eye.classList.toggle('on', ver);
+  eye.setAttribute('aria-label', ver ? 'Ocultar senha' : 'Mostrar senha');
+  eye.title = ver ? 'Ocultar senha' : 'Mostrar senha';
+  pw.focus();
+});
+
+/* esqueci minha senha */
+$('btnEsqueci').addEventListener('click', async () => {
+  const email = $('em').value.trim();
+  if (!email) { msg('Digite seu e-mail acima e clique de novo em "Esqueci minha senha".'); $('em').focus(); return; }
+  const btn = $('btnEsqueci'); btn.disabled = true; msg('Enviando…', true);
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/admin/' });
+  btn.disabled = false;
+  if (error) { msg(traduz(error.message)); return; }
+  msg('Se este e-mail tiver acesso, enviamos um link para redefinir a senha. Confira a caixa de entrada e o spam.', true);
+});
+
 function msg(t, ok) { const m = $('msgLogin'); m.textContent = t || ''; m.className = 'msg' + (ok ? ' ok' : ''); }
 function traduz(m) {
   if (/invalid login|credential/i.test(m)) return 'E-mail ou senha incorretos.';
   if (/not confirmed/i.test(m)) return 'Confirme seu e-mail antes de entrar.';
-  if (/rate limit|too many/i.test(m)) return 'Muitas tentativas. Aguarde um instante.';
+  if (/rate limit|too many|for security/i.test(m)) return 'Muitas tentativas. Aguarde um instante e tente de novo.';
+  if (/valid email|invalid format/i.test(m)) return 'E-mail inválido.';
   return m || 'Não foi possível entrar.';
+}
+
+/* recuperação: quando o link do e-mail traz o usuário de volta, pede a nova senha */
+sb.auth.onAuthStateChange((ev) => { if (ev === 'PASSWORD_RECOVERY') pedirNovaSenha(); });
+async function pedirNovaSenha() {
+  const nova = prompt('Defina uma nova senha para o painel (mínimo 6 caracteres):');
+  if (nova == null) return;
+  if (nova.length < 6) { alert('A senha precisa de pelo menos 6 caracteres.'); return pedirNovaSenha(); }
+  const { error } = await sb.auth.updateUser({ password: nova });
+  if (error) { alert('Não consegui salvar: ' + traduz(error.message)); return; }
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  alert('Senha atualizada. Entrando…');
+  abrirPainel();
 }
 
 $('btnSair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
@@ -450,7 +498,10 @@ function statusPill(s) {
 }
 
 /* ---------- sessão já ativa ---------- */
-sb.auth.getSession().then(({ data }) => { if (data && data.session) abrirPainel(); });
+/* se o link de recuperação trouxe a pessoa de volta, NÃO entrar direto: pedir a nova senha */
+var kvRecovery = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
+if (kvRecovery) { pedirNovaSenha(); }
+else { sb.auth.getSession().then(({ data }) => { if (data && data.session) abrirPainel(); }); }
 </script>
 </body>
 </html>
