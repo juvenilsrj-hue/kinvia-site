@@ -281,13 +281,13 @@ function render(d) {
         <thead><tr><th>Pessoa</th><th>Acompanha</th><th>Último acesso</th><th>Origem</th><th>Rede de apoio</th></tr></thead>
         <tbody>${cuidadores.map(c => `
           <tr><td class="who-cel"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></td>
-            <td class="when">${c.bebeNome ? esc(c.bebeNome) : '—'}${c.cuidaDe ? '<br><small style="color:var(--muted)">de ' + esc(c.cuidaDe) + '</small>' : ''}</td>
+            <td class="when">${c.bebeNome ? esc(c.bebeNome) : '—'}${c.parentesco ? ' <span class="pill info" style="font-size:.68rem">' + esc(c.parentesco) + '</span>' : ''}${c.cuidaDe ? '<br><small style="color:var(--muted)">de ' + esc(c.cuidaDe) + '</small>' : ''}</td>
             <td class="when">${c.vistoEm ? esc(c.vistoEm) : 'nunca'}${c.diasVisto != null ? '<br><small style="' + (c.diasVisto > 7 ? 'color:var(--crit);font-weight:700' : 'color:var(--muted)') + '">há ' + c.diasVisto + ' dia' + (c.diasVisto === 1 ? '' : 's') + '</small>' : ''}</td>
             <td>${c.viaConvite ? '<span class="pill info">Convite Família</span>' : '<span class="pill wait">Marcado à mão</span>'}</td>
             <td>${botaoEnvio(c, 'apoio')}</td>
           </tr>`).join('')}</tbody>
       </table>` : '<div class="vazio">Nenhum co-cuidador.</div>'}</div>
-      <p class="nota">São pessoas convidadas pela função Família para acompanhar o bebê de outra casa, não participantes do beta. Por isso ficam fora das métricas e da lista acima.<br><b>Último acesso</b> = a última vez que a pessoa abriu o app, mesmo sem fazer um login novo. Antes de 18/07 só tínhamos o login, então datas anteriores a essa podem estar defasadas até a pessoa abrir o app de novo.</p>
+      <p class="nota">São pessoas convidadas pela função Família para acompanhar o bebê de outra casa, não participantes do beta. Por isso ficam fora das métricas e da lista acima.<br><b>Último acesso</b> = a última vez que a pessoa abriu o app, mesmo sem fazer um login novo. Antes de 18/07 só tínhamos o login, então datas anteriores a essa podem estar defasadas até a pessoa abrir o app de novo.<br><b>Parentesco</b>: o convite do app ainda não pergunta a relação com o bebê, então ele é anotado manualmente. Peça no chat do Claude (ex.: "a Andressa é avó") que a etiqueta aparece aqui, e pai ou mãe ficam automaticamente fora do disparo de rede de apoio.</p>
     </div>
 
     <div class="pane" id="p-leads">
@@ -365,6 +365,9 @@ function botaoEnvio(p, acao) {
     if (!p.entrou) return '<button class="disp" disabled title="Ainda não fez o primeiro acesso">Não entrou</button>';
     if (p.horasParado == null || p.horasParado <= 72)
       return '<button class="disp" disabled title="Registrou nas últimas 72 horas">Em dia</button>';
+  }
+  if (acao === 'apoio' && p.parentesco && ['mãe','mae','pai'].includes(p.parentesco.toLowerCase())) {
+    return '<button class="disp" disabled title="É ' + esc(p.parentesco) + ' do bebê: a mensagem de rede de apoio não se aplica">É da família</button>';
   }
   const jaFoi = env && (env.status === 'enviado' || env.status === 'enviando');
   const rotulos = { convite: 'Disparar convite', recuperacao: 'Disparar recuperação', habito: 'Retomar hábito', apoio: 'Reforçar apoio' };
