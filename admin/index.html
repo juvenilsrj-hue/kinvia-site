@@ -189,7 +189,9 @@
 <script>
 const SB_URL = 'https://fzsksitqokoxzjfibitg.supabase.co';
 const SB_KEY = 'sb_publishable_aJbuOSFLHu5iDAH979ZPtQ_YpIGTG7q';
-const sb = supabase.createClient(SB_URL, SB_KEY);
+const sb = supabase.createClient(SB_URL, SB_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'kv-admin-auth' }
+});
 
 const $ = id => document.getElementById(id);
 const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -200,7 +202,7 @@ const NOMES = {sono:'😴 Sono', mama:'🍼 Mamada', fralda:'🧷 Fralda', banho
 $('formLogin').addEventListener('submit', async e => {
   e.preventDefault();
   const b = $('btnEntrar'); b.disabled = true; msg('Entrando…', true);
-  const { error } = await sb.auth.signInWithPassword({ email: $('em').value.trim(), password: $('pw').value });
+  const { error } = await sb.auth.signInWithPassword({ email: $('em').value.trim().toLowerCase(), password: $('pw').value });
   b.disabled = false;
   if (error) { msg(traduz(error.message)); return; }
   msg('');
@@ -301,18 +303,33 @@ async function abrirPainel() {
 
 /* ---------- dados ---------- */
 async function carregar(recarregando) {
+  // garante que a sessão está viva antes de pedir dados (renova o token se preciso)
+  const { data: sess } = await sb.auth.getSession();
+  if (!sess || !sess.session) { voltarAoLogin('Sua sessão expirou. Entre de novo, por favor.'); return; }
+
   if (recarregando) $('conteudo').innerHTML = '<div class="loading">Atualizando…</div>';
   const { data, error } = await sb.rpc('kv_admin_overview');
   if (error) {
-    const negado = /acesso negado|permission|denied/i.test(error.message || '');
+    const m = error.message || '';
+    if (/jwt|token|expired|session|not authenticated|401/i.test(m)) {
+      voltarAoLogin('Sua sessão expirou. Entre de novo, por favor.'); return;
+    }
+    const negado = /acesso negado|permission|denied/i.test(m);
     $('conteudo').innerHTML = '<div class="card"><div class="vazio">' +
       (negado
         ? '<b>Esta conta não tem acesso ao painel.</b><br>Se você deveria ter acesso, peça para incluírem seu e-mail na lista de administradores.'
-        : 'Não foi possível carregar os dados: ' + esc(error.message)) +
+        : 'Não foi possível carregar os dados: ' + esc(m) + '<br><br><button class="mini pri" onclick="carregar(true)">Tentar de novo</button>') +
       '</div></div>';
     return;
   }
   render(data);
+}
+
+function voltarAoLogin(aviso) {
+  $('telaPainel').style.display = 'none';
+  $('telaLogin').style.display = '';
+  if (aviso) msg(aviso);
+  const em = $('em'); if (em && !em.value) { sb.auth.getUser().then(({data}) => { if (data && data.user) em.value = data.user.email; }); }
 }
 
 function render(d) {
