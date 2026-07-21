@@ -44,6 +44,10 @@
   .pw-eye.on{opacity:1}
   .link-esq{display:block;margin:14px auto 0;background:none;border:0;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--kin);text-decoration:underline;text-underline-offset:3px}
   .link-esq:hover{color:var(--via-dark)}
+  .nova-bg{position:fixed;inset:0;z-index:100060;background:rgba(60,40,30,.5);display:flex;align-items:center;justify-content:center;padding:20px}
+  .nova-card{width:100%;max-width:370px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:30px 28px}
+  .nova-card h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.2rem;text-align:center;margin-bottom:4px}
+  .nova-card p.sub{font-size:.83rem;color:var(--muted);text-align:center;margin-bottom:20px}
 
   /* ===== topo ===== */
   .top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px}
@@ -219,6 +223,7 @@ $('btnEye').addEventListener('click', () => {
 $('btnEsqueci').addEventListener('click', async () => {
   const email = $('em').value.trim();
   if (!email) { msg('Digite seu e-mail acima e clique de novo em "Esqueci minha senha".'); $('em').focus(); return; }
+  if (!confirm('Enviar um link de redefinição de senha para ' + email + '?\n\nSó use isto se você realmente esqueceu a senha. Ao redefinir, a senha atual deixa de funcionar.')) return;
   const btn = $('btnEsqueci'); btn.disabled = true; msg('Enviando…', true);
   const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/admin/' });
   btn.disabled = false;
@@ -235,17 +240,52 @@ function traduz(m) {
   return m || 'Não foi possível entrar.';
 }
 
-/* recuperação: quando o link do e-mail traz o usuário de volta, pede a nova senha */
+/* recuperação: quando o link do e-mail traz o usuário de volta, pede a nova senha numa tela própria */
 sb.auth.onAuthStateChange((ev) => { if (ev === 'PASSWORD_RECOVERY') pedirNovaSenha(); });
-async function pedirNovaSenha() {
-  const nova = prompt('Defina uma nova senha para o painel (mínimo 6 caracteres):');
-  if (nova == null) return;
-  if (nova.length < 6) { alert('A senha precisa de pelo menos 6 caracteres.'); return pedirNovaSenha(); }
-  const { error } = await sb.auth.updateUser({ password: nova });
-  if (error) { alert('Não consegui salvar: ' + traduz(error.message)); return; }
-  try { history.replaceState(null, '', location.pathname); } catch (e) {}
-  alert('Senha atualizada. Entrando…');
-  abrirPainel();
+function pedirNovaSenha() {
+  if (document.getElementById('novaBg')) return;
+  const bg = document.createElement('div');
+  bg.className = 'nova-bg'; bg.id = 'novaBg';
+  bg.innerHTML = `
+    <div class="nova-card">
+      <div class="logo" style="text-align:center"><b>Kin</b><i>via</i></div>
+      <h2>Definir nova senha</h2>
+      <p class="sub">Escolha a senha que você vai usar para entrar no painel.</p>
+      <div class="fld">
+        <label for="np1">Nova senha</label>
+        <div class="pw-wrap">
+          <input id="np1" type="password" autocomplete="new-password" placeholder="mínimo 6 caracteres">
+          <button type="button" class="pw-eye" id="npEye" title="Mostrar senha">👁</button>
+        </div>
+      </div>
+      <div class="fld">
+        <label for="np2">Repita a nova senha</label>
+        <input id="np2" type="password" autocomplete="new-password" placeholder="digite de novo">
+      </div>
+      <button class="btn" id="npSalvar" type="button">Salvar e entrar</button>
+      <div class="msg" id="npMsg"></div>
+    </div>`;
+  document.body.appendChild(bg);
+  const np1 = document.getElementById('np1'), np2 = document.getElementById('np2'),
+        eye = document.getElementById('npEye'), nMsg = document.getElementById('npMsg');
+  np1.focus();
+  eye.addEventListener('click', () => {
+    const ver = np1.type === 'password';
+    np1.type = np2.type = ver ? 'text' : 'password';
+    eye.textContent = ver ? '🙈' : '👁'; eye.classList.toggle('on', ver);
+    np1.focus();
+  });
+  document.getElementById('npSalvar').addEventListener('click', async () => {
+    const a = np1.value, b = np2.value;
+    if (a.length < 6) { nMsg.textContent = 'A senha precisa de pelo menos 6 caracteres.'; np1.focus(); return; }
+    if (a !== b) { nMsg.textContent = 'As duas senhas não são iguais. Confira e tente de novo.'; np2.focus(); return; }
+    const s = document.getElementById('npSalvar'); s.disabled = true; s.textContent = 'Salvando…';
+    const { error } = await sb.auth.updateUser({ password: a });
+    if (error) { s.disabled = false; s.textContent = 'Salvar e entrar'; nMsg.textContent = traduz(error.message); return; }
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    bg.remove();
+    abrirPainel();
+  });
 }
 
 $('btnSair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
