@@ -349,6 +349,12 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .cmp tbody tr:last-child td{border-bottom:none}
 .cmp .no{color:#CDBFB0}
 .cmp .val{font-size:.8rem;font-weight:700;color:var(--via-dark)}
+/* marcas minimalistas (sem emoji) */
+.cmp .ck{display:inline-block;width:22px;height:22px;border-radius:50%;background:#DCEFE3;position:relative;vertical-align:middle}
+.cmp .ck::after{content:'';position:absolute;left:8px;top:5px;width:5px;height:10px;border:solid #43855F;border-width:0 2px 2px 0;border-radius:1px;transform:rotate(42deg)}
+.cmp .nk{display:inline-block;width:12px;height:2px;border-radius:2px;background:#DCD0C0;vertical-align:middle}
+.cmp thead .thp{color:var(--kin)}
+.cmp thead .star{color:var(--via);margin-right:4px;font-size:.9rem}
 /* cards de preço */
 .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:36px 0 4px}
 .pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative}
@@ -620,32 +626,32 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
 <section class="pricing" id="planos">
   <div class="wrap">
     <div class="pr-card" style="max-width:860px">
-      <h2>Grátis para começar. <em>Premium para ir além.</em></h2>
-      <p class="sub">O essencial da rotina é grátis para sempre. O Premium libera tudo, e quem chega agora ganha <b>1 mês de Premium grátis</b>.</p>
+      <h2>Cada cuidado importa. <em>O Kinvia ajuda você em todos eles.</em></h2>
+      <p class="sub">Comece grátis com o essencial da rotina. O Premium libera cada detalhe, e quem chega agora ganha <b>1 mês de Premium grátis</b>.</p>
 
       <div class="cmp-wrap">
         <table class="cmp">
           <thead>
-            <tr><th>Recurso</th><th>🆓 Grátis</th><th>⭐ Premium</th></tr>
+            <tr><th>Recurso</th><th>Grátis</th><th class="thp"><span class="star">✦</span>Premium</th></tr>
           </thead>
           <tbody>
-            <tr><td>Registros do dia a dia<small>mamada, sono, fralda, banho, remédio, humor, marcos, água</small></td><td>✅</td><td>✅</td></tr>
-            <tr><td>Cronômetro ao vivo de sono e mamada</td><td>✅</td><td>✅</td></tr>
-            <tr><td>Carteira de vacinas<small>PNI, doses, agendamento, lembretes</small></td><td>✅</td><td>✅</td></tr>
-            <tr><td>Introdução alimentar<small>registro de alimentos e reações</small></td><td>✅</td><td>✅</td></tr>
-            <tr><td>Guia da alimentação<small>o que oferecer, como preparar, o que evitar</small></td><td>✅</td><td>✅</td></tr>
-            <tr><td>Segurança contra engasgo e lista de proibidos</td><td>✅</td><td>✅</td></tr>
-            <tr><td>Lembretes de refeição, água, mamada e soneca</td><td>✅</td><td>✅</td></tr>
-            <tr><td>Consultas e compartilhar dia no WhatsApp</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Registros do dia a dia<small>mamada, sono, fralda, banho, remédio, humor, marcos, água</small></td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Cronômetro ao vivo de sono e mamada</td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Carteira de vacinas<small>PNI, doses, agendamento, lembretes</small></td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Introdução alimentar<small>registro de alimentos e reações</small></td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Guia da alimentação<small>o que oferecer, como preparar, o que evitar</small></td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Segurança contra engasgo e lista de proibidos</td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Lembretes de refeição, água, mamada e soneca</td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>Consultas e compartilhar dia no WhatsApp</td><td><span class="ck" role="img" aria-label="Incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
             <tr><td>Histórico</td><td><span class="val">últimos 7 dias</span></td><td><span class="val">completo</span></td></tr>
-            <tr><td>✨ Kinvia IA<small>resumo da semana + tirar dúvidas</small></td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>📊 Relatórios e PDF pro pediatra</td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>📏 Crescimento nas curvas da OMS</td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>👨‍👩‍👧 Família<small>até 3 cuidadores juntos</small></td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>👶 Vários bebês<small>gêmeos, irmãos</small></td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>🎤 Registro por voz</td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>🥜 Painel de alérgenos<small>9 principais</small></td><td class="no">✕</td><td>✅</td></tr>
-            <tr><td>👩‍🍳 15 receitas por fase</td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>✨ Kinvia IA<small>resumo da semana + tirar dúvidas</small></td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>📊 Relatórios e PDF pro pediatra</td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>📏 Crescimento nas curvas da OMS</td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>👨‍👩‍👧 Família<small>até 3 cuidadores juntos</small></td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>👶 Vários bebês<small>gêmeos, irmãos</small></td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>🎤 Registro por voz</td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>🥜 Painel de alérgenos<small>9 principais</small></td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
+            <tr><td>👩‍🍳 15 receitas por fase</td><td><span class="nk" role="img" aria-label="Não incluído"></span></td><td><span class="ck" role="img" aria-label="Incluído"></span></td></tr>
           </tbody>
         </table>
       </div>
