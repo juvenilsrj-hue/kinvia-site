@@ -358,7 +358,9 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .cmp thead .star{color:var(--via);margin-right:4px;font-size:.9rem}
 /* cards de preço */
 .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:36px 0 4px}
-.pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative}
+.pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative;display:block;text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease}
+a.pp:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(124,106,138,.16)}
+.pp .per,.pp .val,.pp .note{display:block}
 .pp .per{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .pp .val{font-size:1.3rem;font-weight:800;color:var(--ink);margin-top:6px;font-variant-numeric:tabular-nums}
 .pp .val small{font-size:.72rem;color:var(--muted);font-weight:600}
@@ -404,14 +406,6 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
 .step p{color:var(--muted);font-size:.95rem;max-width:280px;margin-bottom:12px}
 .step .iphone{max-width:230px}
 
-/* ===== extras da rotina (pills) ===== */
-.extra{padding:90px 0}
-.extra .head{text-align:center;max-width:640px;margin:0 auto 34px}
-.extra h2{font-size:clamp(1.8rem,3.6vw,2.6rem);color:var(--kin)}
-.extra h2 em{font-style:italic;color:var(--via)}
-.extra .head p{color:var(--muted);font-size:1.05rem;margin-top:12px}
-.pills{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:880px;margin:0 auto;padding:0 24px}
-.pills span{background:var(--white);border-radius:999px;padding:11px 20px;font-weight:600;font-size:.92rem;color:var(--ink);box-shadow:0 8px 20px rgba(124,106,138,.1)}
 
 /* ===== responsivo ===== */
 @media(max-width:900px){
@@ -616,29 +610,6 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   </div>
 </section>
 
-<!-- ===== e o resto da rotina (compacto) ===== -->
-<section class="extra" id="funcionalidades">
-  <div class="wrap">
-    <div class="head">
-      <h2>E o resto da rotina? <em>Já mora aqui.</em></h2>
-      <p>Quando o sono encontra o ritmo, o resto acompanha, tudo num app só.</p>
-    </div>
-    <div class="pills">
-      <span>🍼 Mamadas e mamadeira em ml</span>
-      <span>💉 Vacinas SUS × particular</span>
-      <span>💊 Remédios e febre</span>
-      <span>📈 Crescimento nas curvas da OMS</span>
-      <span>🥄 Introdução alimentar e alérgenos</span>
-      <span>👨‍👩‍👧 Família sincronizada</span>
-      <span>👯 Suporte a gêmeos</span>
-      <span>🎤 Registro por voz</span>
-      <span>📄 Relatório PDF para o pediatra</span>
-      <span>⭐ Marcos e humor</span>
-      <span>🔒 Backup e exportação</span>
-    </div>
-  </div>
-</section>
-
 <!-- ===== Planos: Grátis × Premium ===== -->
 <section class="pricing" id="planos">
   <div class="wrap">
@@ -674,11 +645,12 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
       </div>
 
       <div class="price-grid">
-        <div class="pp"><div class="per">Mensal</div><div class="val">R$ 49,90<small>/mês</small></div><div class="note">sem fidelidade</div></div>
-        <div class="pp"><div class="per">Trimestral</div><div class="val">R$ 34,90<small>/mês</small></div><div class="note">30% de economia</div></div>
-        <div class="pp"><div class="per">Semestral</div><div class="val">R$ 29,90<small>/mês</small></div><div class="note">40% de economia</div></div>
-        <div class="pp best"><span class="tag">56% de economia</span><div class="per">Anual</div><div class="val">R$ 21,90<small>/mês</small></div><div class="note">R$ 262,80 no ano, ~R$ 0,72 por dia</div></div>
+        <a class="pp" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Mensal pelo app"><span class="per">Mensal</span><span class="val">R$ 49,90<small>/mês</small></span><span class="note">sem fidelidade</span></a>
+        <a class="pp" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Trimestral pelo app"><span class="per">Trimestral</span><span class="val">R$ 34,90<small>/mês</small></span><span class="note">30% de economia</span></a>
+        <a class="pp" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Semestral pelo app"><span class="per">Semestral</span><span class="val">R$ 29,90<small>/mês</small></span><span class="note">40% de economia</span></a>
+        <a class="pp best" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Anual pelo app"><span class="tag">56% de economia</span><span class="per">Anual</span><span class="val">R$ 21,90<small>/mês</small></span><span class="note">R$ 262,80 no ano, ~R$ 0,72 por dia</span></a>
       </div>
+      <p class="micro" style="margin-top:10px">A assinatura é feita dentro do app, depois de baixar. Comece pelo plano grátis e evolua quando fizer sentido.</p>
 
       <div class="cta"><a class="btn" style="padding:17px 42px;font-size:1.1rem" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener">Baixar no Google Play</a></div>
       <p class="micro">Tem iPhone? <a href="#lista" style="color:var(--via-dark);font-weight:700">Entre na lista</a> e seja avisada quando chegar à App Store. Assine quando quiser, seus dados continuam seus, sempre.</p>
@@ -806,7 +778,7 @@ addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30),{passi
 /* reveal suave ao rolar (?noanim na URL desativa, p/ testes) */
 (function(){
   if(location.search.includes('noanim')||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const els=document.querySelectorAll('.hero-copy,.hero-media,.dor .head,.dor-card,.dor-turn,.sc-head,.step,.video-frame,.hist .inner,.ia-copy,.ia-app,.extra .head,.pills,.pr-card,.faq h2,.faq-list,.final .box');
+  const els=document.querySelectorAll('.hero-copy,.hero-media,.dor .head,.dor-card,.dor-turn,.sc-head,.step,.video-frame,.hist .inner,.ia-copy,.ia-app,.pr-card,.faq h2,.faq-list,.final .box');
   els.forEach(el=>el.classList.add('reveal'));
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   els.forEach(el=>io.observe(el));
