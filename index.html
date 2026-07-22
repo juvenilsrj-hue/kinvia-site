@@ -366,7 +366,21 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .pp.best{background:var(--white);border:2px solid var(--via);box-shadow:0 12px 26px rgba(213,130,106,.18)}
 .pp.best .val{color:var(--via-dark)}
 .pp .tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;font-size:.66rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
-@media(max-width:700px){.price-grid{grid-template-columns:repeat(2,1fr)}.pp.best{grid-row:1}}
+@media(max-width:700px){
+  .price-grid{grid-template-columns:repeat(2,1fr)}
+  .pp.best{grid-row:1}
+  /* tabela cabe inteira na tela do celular, sem rolagem lateral */
+  .cmp{min-width:0}
+  .cmp th,.cmp td{padding:10px 5px;font-size:.82rem}
+  .cmp td:first-child,.cmp th:first-child{padding-left:0}
+  .cmp thead th{font-size:.64rem;letter-spacing:.02em}
+  .cmp td:first-child small{font-size:.72rem}
+  .cmp th:nth-child(2),.cmp td:nth-child(2){width:60px}
+  .cmp th:nth-child(3),.cmp td:nth-child(3){width:66px;white-space:normal}
+  .cmp .ck{width:19px;height:19px}
+  .cmp .ck::after{left:7px;top:4px;width:4px;height:8px}
+  .cmp .val{font-size:.68rem;white-space:normal}
+}
 
 /* ===== FAQ ===== */
 .faq{padding:100px 0}
