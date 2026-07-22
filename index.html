@@ -628,7 +628,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   <div class="wrap">
     <div class="pr-card" style="max-width:860px">
       <h2>Cada cuidado importa. <em>O Kinvia ajuda você em todos eles.</em></h2>
-      <p class="sub">Comece grátis com o essencial da rotina. O Premium libera cada detalhe, e quem chega agora ganha <b>1 mês de Premium grátis</b>.</p>
+      <p class="sub">Comece grátis com o essencial da rotina. O Premium libera cada detalhe da jornada do seu bebê.</p>
 
       <div class="cmp-wrap">
         <table class="cmp">
@@ -675,7 +675,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   <div class="wrap">
     <h2>Perguntas rápidas</h2>
     <div class="faq-list">
-      <details><summary>Onde o Kinvia está disponível?</summary><div class="a">O Kinvia já está no ar no <a href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" style="color:var(--via-dark);font-weight:700">Google Play</a> para Android. A versão para iPhone está em finalização: entre na lista e você é avisada em primeira mão quando chegar à App Store, com 1 mês grátis de Premium garantido por ter chegado cedo.</div></details>
+      <details><summary>Onde o Kinvia está disponível?</summary><div class="a">O Kinvia já está no ar no <a href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" style="color:var(--via-dark);font-weight:700">Google Play</a> para Android. A versão para iPhone está em finalização: entre na lista e você é avisada em primeira mão assim que chegar à App Store.</div></details>
       <details><summary>Outras pessoas podem usar junto?</summary><div class="a">Sim. No Premium você convida quem cuida com você, pai, mãe, avós, e tudo sincroniza em tempo real. Funciona com mais de um bebê.</div></details>
       <details><summary>A Kinvia IA substitui o pediatra?</summary><div class="a">Não. A Kinvia IA não substitui pediatra, diagnóstico, prescrição ou orientação médica. Ela apoia a organização da rotina e ajuda a família a enxergar padrões a partir dos dados registrados.</div></details>
       <details><summary>Meus dados estão protegidos?</summary><div class="a">Os dados do seu bebê são seus: criptografados em trânsito, exportáveis quando quiser e apagáveis por completo a pedido, como manda a LGPD.</div></details>
@@ -713,7 +713,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
       <div class="lista-ok" id="listaOk" hidden>
         <div class="big">🎉</div>
         <h3 id="okTitulo">Você está na lista!</h3>
-        <p>Guardamos seu lugar. Quando o Kinvia chegar à App Store, você recebe o aviso em primeira mão, com 1 mês grátis de Premium.</p>
+        <p>Guardamos seu lugar. Quando o Kinvia chegar à App Store, você recebe o aviso em primeira mão.</p>
         <a class="wa-share" id="waShare" href="#" target="_blank" rel="noopener">💬 Chamar uma amiga pra lista</a>
         <button type="button" class="lk" id="okOutro">cadastrar outro e-mail</button>
       </div>
@@ -812,7 +812,7 @@ addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>30),{passi
     panel.hidden=true;ok.hidden=false;
     if(nome)document.getElementById('okTitulo').textContent='Pronto, '+nome+'! Você está na lista.';
     const url=location.origin+location.pathname;
-    const txt='Ei! Entrei na lista do Kinvia, um app brasileiro que organiza a rotina do bebê. No Android já dá pra baixar, e no iPhone quem entra na lista ganha 1 mês de Premium grátis: '+url;
+    const txt='Ei! Entrei na lista do Kinvia, um app brasileiro que organiza a rotina do bebê. No Android já dá pra baixar, e no iPhone dá pra entrar na lista e ser avisado assim que chegar: '+url;
     document.getElementById('waShare').href='https://wa.me/?text='+encodeURIComponent(txt);
     try{localStorage.setItem('kv_lista_nome',nome||'')}catch(e){}
   }
