@@ -336,6 +336,30 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .pr-card .micro{font-size:.85rem;color:var(--muted)}
 .inclui{display:flex;gap:10px 26px;justify-content:center;flex-wrap:wrap;margin-top:38px;padding-top:32px;border-top:1px dashed #EBDFC9}
 .inclui span{font-size:.9rem;font-weight:600;color:var(--ink)}
+.pr-card h2 em{font-style:italic;color:var(--via)}
+/* tabela Grátis × Premium */
+.cmp-wrap{overflow-x:auto;margin-top:6px}
+.cmp{width:100%;border-collapse:collapse;text-align:left;min-width:540px}
+.cmp th,.cmp td{padding:11px 12px;border-bottom:1px solid #F2E9D8;font-size:.9rem;line-height:1.35}
+.cmp thead th{font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:800;border-bottom:2px solid #EBDFC9;white-space:nowrap}
+.cmp th:nth-child(2),.cmp td:nth-child(2),.cmp th:nth-child(3),.cmp td:nth-child(3){text-align:center;white-space:nowrap}
+.cmp td:first-child{color:var(--ink);font-weight:600}
+.cmp td:first-child small{display:block;font-weight:500;color:var(--muted);font-size:.78rem}
+.cmp th:nth-child(3),.cmp td:nth-child(3){background:#F8F3FA}
+.cmp tbody tr:last-child td{border-bottom:none}
+.cmp .no{color:#CDBFB0}
+.cmp .val{font-size:.8rem;font-weight:700;color:var(--via-dark)}
+/* cards de preço */
+.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:36px 0 4px}
+.pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative}
+.pp .per{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.pp .val{font-size:1.3rem;font-weight:800;color:var(--ink);margin-top:6px;font-variant-numeric:tabular-nums}
+.pp .val small{font-size:.72rem;color:var(--muted);font-weight:600}
+.pp .note{font-size:.72rem;color:var(--muted);margin-top:4px}
+.pp.best{background:var(--white);border:2px solid var(--via);box-shadow:0 12px 26px rgba(213,130,106,.18)}
+.pp.best .val{color:var(--via-dark)}
+.pp .tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;font-size:.66rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+@media(max-width:700px){.price-grid{grid-template-columns:repeat(2,1fr)}.pp.best{grid-row:1}}
 
 /* ===== FAQ ===== */
 .faq{padding:100px 0}
@@ -412,7 +436,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
         <a class="lnk" href="#como-funciona">Como funciona</a>
         <a class="lnk" href="historia.html">Nossa história</a>
         <a class="lnk" href="#kinvia-ia">Kinvia IA</a>
-        <a class="lnk" href="#planos">O que você garante</a>
+        <a class="lnk" href="#planos">Planos</a>
       </nav>
       <a class="btn btn-sm" href="#lista"><span class="cta-lg">Baixar o Kinvia</span><span class="cta-sm">Baixar</span></a>
       <button class="nav-burger" id="navBurger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -592,20 +616,49 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
   </div>
 </section>
 
-<!-- ===== O que você garante (pré-lançamento; preços voltam no lançamento) ===== -->
+<!-- ===== Planos: Grátis × Premium ===== -->
 <section class="pricing" id="planos">
   <div class="wrap">
-    <div class="pr-card">
-      <h2>O que você recebe ao chegar agora</h2>
-      <p class="sub">Os planos pagos serão apresentados em breve. Quem chega nesta fase já começa com um cuidado especial desde o primeiro acesso.</p>
-      <div class="gar-list">
-        <div class="gar-item"><span class="gi">🎁</span><div><b>1 mês de Premium grátis</b><small>para usar todos os recursos do Kinvia no começo, sem pagar nada</small></div></div>
+    <div class="pr-card" style="max-width:860px">
+      <h2>Grátis para começar. <em>Premium para ir além.</em></h2>
+      <p class="sub">O essencial da rotina é grátis para sempre. O Premium libera tudo, e quem chega agora ganha <b>1 mês de Premium grátis</b>.</p>
+
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead>
+            <tr><th>Recurso</th><th>🆓 Grátis</th><th>⭐ Premium</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Registros do dia a dia<small>mamada, sono, fralda, banho, remédio, humor, marcos, água</small></td><td>✅</td><td>✅</td></tr>
+            <tr><td>Cronômetro ao vivo de sono e mamada</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Carteira de vacinas<small>PNI, doses, agendamento, lembretes</small></td><td>✅</td><td>✅</td></tr>
+            <tr><td>Introdução alimentar<small>registro de alimentos e reações</small></td><td>✅</td><td>✅</td></tr>
+            <tr><td>Guia da alimentação<small>o que oferecer, como preparar, o que evitar</small></td><td>✅</td><td>✅</td></tr>
+            <tr><td>Segurança contra engasgo e lista de proibidos</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Lembretes de refeição, água, mamada e soneca</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Consultas e compartilhar dia no WhatsApp</td><td>✅</td><td>✅</td></tr>
+            <tr><td>Histórico</td><td><span class="val">últimos 7 dias</span></td><td><span class="val">completo</span></td></tr>
+            <tr><td>✨ Kinvia IA<small>resumo da semana + tirar dúvidas</small></td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>📊 Relatórios e PDF pro pediatra</td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>📏 Crescimento nas curvas da OMS</td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>👨‍👩‍👧 Família<small>até 3 cuidadores juntos</small></td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>👶 Vários bebês<small>gêmeos, irmãos</small></td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>🎤 Registro por voz</td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>🥜 Painel de alérgenos<small>9 principais</small></td><td class="no">✕</td><td>✅</td></tr>
+            <tr><td>👩‍🍳 15 receitas por fase</td><td class="no">✕</td><td>✅</td></tr>
+          </tbody>
+        </table>
       </div>
+
+      <div class="price-grid">
+        <div class="pp"><div class="per">Mensal</div><div class="val">R$ 49,90<small>/mês</small></div><div class="note">sem fidelidade</div></div>
+        <div class="pp"><div class="per">Trimestral</div><div class="val">R$ 34,90<small>/mês</small></div><div class="note">30% de economia</div></div>
+        <div class="pp"><div class="per">Semestral</div><div class="val">R$ 29,90<small>/mês</small></div><div class="note">40% de economia</div></div>
+        <div class="pp best"><span class="tag">56% de economia</span><div class="per">Anual</div><div class="val">R$ 21,90<small>/mês</small></div><div class="note">R$ 262,80 no ano, ~R$ 0,72 por dia</div></div>
+      </div>
+
       <div class="cta"><a class="btn" style="padding:17px 42px;font-size:1.1rem" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener">Baixar no Google Play</a></div>
-      <p class="micro">Tem iPhone? <a href="#lista" style="color:var(--via-dark);font-weight:700">Entre na lista</a> e seja avisada quando chegar à App Store. Sem compromisso. Seus dados continuam seus, sempre.</p>
-      <div class="inclui">
-        <span>🎤 Registro por voz</span><span>💉 Vacinas com lembrete</span><span>📄 PDF para o pediatra</span><span>📈 Curvas OMS</span><span>👨‍👩‍👧 Família sincronizada</span><span>✨ Kinvia IA</span>
-      </div>
+      <p class="micro">Tem iPhone? <a href="#lista" style="color:var(--via-dark);font-weight:700">Entre na lista</a> e seja avisada quando chegar à App Store. Assine quando quiser, seus dados continuam seus, sempre.</p>
     </div>
   </div>
 </section>
@@ -705,7 +758,7 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
     </div>
     <div class="foot-links">
       <a href="historia.html">Nossa história</a>
-      <a href="#planos">O que você garante</a>
+      <a href="#planos">Planos</a>
       <a href="#contato" data-ct-open>Contato</a>
       <a href="privacidade.html">Privacidade</a>
     </div>
