@@ -358,8 +358,7 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .cmp thead .star{color:var(--via);margin-right:4px;font-size:.9rem}
 /* cards de preço */
 .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:36px 0 4px}
-.pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative;display:block;text-decoration:none;color:inherit;transition:transform .15s ease,box-shadow .15s ease}
-a.pp:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(124,106,138,.16)}
+.pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative}
 .pp .per,.pp .val,.pp .note{display:block}
 .pp .per{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .pp .val{font-size:1.3rem;font-weight:800;color:var(--ink);margin-top:6px;font-variant-numeric:tabular-nums}
@@ -645,10 +644,10 @@ details .a{padding:0 4px 24px;color:var(--muted);font-size:.95rem;max-width:600p
       </div>
 
       <div class="price-grid">
-        <a class="pp" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Mensal pelo app"><span class="per">Mensal</span><span class="val">R$ 49,90<small>/mês</small></span><span class="note">sem fidelidade</span></a>
-        <a class="pp" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Trimestral pelo app"><span class="per">Trimestral</span><span class="val">R$ 34,90<small>/mês</small></span><span class="note">30% de economia</span></a>
-        <a class="pp" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Semestral pelo app"><span class="per">Semestral</span><span class="val">R$ 29,90<small>/mês</small></span><span class="note">40% de economia</span></a>
-        <a class="pp best" href="https://play.google.com/store/apps/details?id=br.com.kinvia.app" target="_blank" rel="noopener" aria-label="Assinar o plano Anual pelo app"><span class="tag">56% de economia</span><span class="per">Anual</span><span class="val">R$ 21,90<small>/mês</small></span><span class="note">R$ 262,80 no ano, ~R$ 0,72 por dia</span></a>
+        <div class="pp"><span class="per">Mensal</span><span class="val">R$ 49,90<small>/mês</small></span><span class="note">sem fidelidade</span></div>
+        <div class="pp"><span class="per">Trimestral</span><span class="val">R$ 34,90<small>/mês</small></span><span class="note">30% de economia</span></div>
+        <div class="pp"><span class="per">Semestral</span><span class="val">R$ 29,90<small>/mês</small></span><span class="note">40% de economia</span></div>
+        <div class="pp best"><span class="tag">56% de economia</span><span class="per">Anual</span><span class="val">R$ 21,90<small>/mês</small></span><span class="note">R$ 262,80 no ano, ~R$ 0,72 por dia</span></div>
       </div>
       <p class="micro" style="margin-top:10px">A assinatura é feita dentro do app, depois de baixar. Comece pelo plano grátis e evolua quando fizer sentido.</p>
 
