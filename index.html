@@ -358,13 +358,18 @@ footer{padding:40px 0 30px;color:var(--muted);font-size:.9rem}
 .cmp thead .star{color:var(--via);margin-right:4px;font-size:.9rem}
 /* cards de preço */
 .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:36px 0 4px}
-.pp{background:var(--cream);border:1px solid rgba(124,106,138,.12);border-radius:16px;padding:18px 10px 14px;position:relative}
+.pp{background:linear-gradient(160deg,#FFFDF8,#F4EAD6);border:1px solid rgba(255,255,255,.7);border-radius:22px;padding:20px 12px 16px;position:relative;
+  box-shadow:0 14px 26px rgba(124,106,138,.16), 0 4px 8px rgba(124,106,138,.10), inset 0 2px 3px rgba(255,255,255,.9), inset 0 -6px 12px rgba(160,140,120,.14);
+  transition:transform .18s ease, box-shadow .18s ease}
+.pp:hover{transform:translateY(-4px);box-shadow:0 22px 38px rgba(124,106,138,.22), 0 6px 12px rgba(124,106,138,.12), inset 0 2px 3px rgba(255,255,255,.95), inset 0 -6px 12px rgba(160,140,120,.14)}
 .pp .per,.pp .val,.pp .note{display:block}
 .pp .per{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .pp .val{font-size:1.3rem;font-weight:800;color:var(--ink);margin-top:6px;font-variant-numeric:tabular-nums}
 .pp .val small{font-size:.72rem;color:var(--muted);font-weight:600}
 .pp .note{font-size:.72rem;color:var(--muted);margin-top:4px}
-.pp.best{background:var(--white);border:2px solid var(--via);box-shadow:0 12px 26px rgba(213,130,106,.18)}
+.pp.best{background:linear-gradient(160deg,#FFF7F2,#FBE7DC);border:2px solid var(--via);
+  box-shadow:0 18px 34px rgba(213,130,106,.26), 0 5px 10px rgba(213,130,106,.16), inset 0 2px 3px rgba(255,255,255,.9), inset 0 -6px 12px rgba(192,107,82,.14)}
+.pp.best:hover{transform:translateY(-4px);box-shadow:0 26px 46px rgba(213,130,106,.30), 0 7px 14px rgba(213,130,106,.18), inset 0 2px 3px rgba(255,255,255,.95), inset 0 -6px 12px rgba(192,107,82,.14)}
 .pp.best .val{color:var(--via-dark)}
 .pp .tag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(140deg,var(--via),var(--via-dark));color:#fff;font-size:.66rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
 @media(max-width:700px){
