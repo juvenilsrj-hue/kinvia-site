@@ -367,7 +367,7 @@ function render(d) {
       </div></div>
       <div class="sec">Participantes (${participantes.length})</div>
       <div class="card"><table>
-        <thead><tr><th>Pessoa</th><th>Bebê</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th>Premium até</th><th>Retomar hábito</th></tr></thead>
+        <thead><tr><th>Pessoa</th><th>Bebê</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th>Premium até</th><th>Retomar hábito</th><th>Agradecer</th></tr></thead>
         <tbody>${participantes.map(p => `
           <tr>
             <td class="who-cel"><b>${esc(p.nome)}</b><small>${esc(p.email)}</small></td>
@@ -377,6 +377,7 @@ function render(d) {
             <td class="num">${p.registros}</td>
             <td class="when">${p.sentinela ? '1 mês após ativar' : (p.premiumAte ? esc(p.premiumAte) : '—')}</td>
             <td>${botaoEnvio(p, 'habito')}</td>
+            <td>${botaoEnvio(p, 'obrigado')}</td>
           </tr>`).join('')}</tbody>
       </table></div>
       <p class="nota">“Ativa” = usou o app nos últimos 7 dias. “1 mês após ativar” = o Premium só começa a contar no primeiro uso.<br>O botão <b>Retomar hábito</b> aparece para quem já entrou mas está sem registrar há mais de 72 horas. A mensagem é personalizada com o nome e a fase do bebê.</p>
@@ -471,11 +472,14 @@ function botaoEnvio(p, acao) {
     if (p.horasParado == null || p.horasParado <= 72)
       return '<button class="disp" disabled title="Registrou nas últimas 72 horas">Em dia</button>';
   }
+  if (acao === 'obrigado' && !p.entrou) {
+    return '<button class="disp" disabled title="Este agradecimento é para quem já está usando">Não entrou</button>';
+  }
   if (acao === 'apoio' && p.parentesco && ['mãe','mae','pai'].includes(p.parentesco.toLowerCase())) {
     return '<button class="disp" disabled title="É ' + esc(p.parentesco) + ' do bebê: a mensagem de rede de apoio não se aplica">É da família</button>';
   }
   const jaFoi = env && (env.status === 'enviado' || env.status === 'enviando');
-  const rotulos = { convite: 'Disparar convite', recuperacao: 'Disparar recuperação', habito: 'Retomar hábito', apoio: 'Reforçar apoio' };
+  const rotulos = { convite: 'Disparar convite', recuperacao: 'Disparar recuperação', habito: 'Retomar hábito', apoio: 'Reforçar apoio', obrigado: 'Agradecer + 21 dias' };
   const rotulo = jaFoi ? 'Reenviar' : rotulos[acao];
   const marca = env
     ? (env.status === 'enviado' ? `<span class="env-ok">✓ enviado ${esc(env.quando)}</span>`
@@ -532,12 +536,12 @@ async function verEmail(email, acao) {
 
 async function disparar(btn) {
   const { acao, email, nome } = btn.dataset;
-  const oQueMapa = { convite: 'o convite de acesso', recuperacao: 'a mensagem de recuperação', habito: 'a mensagem de retomada de hábito', apoio: 'a mensagem de rede de apoio' };
+  const oQueMapa = { convite: 'o convite de acesso', recuperacao: 'a mensagem de recuperação', habito: 'a mensagem de retomada de hábito', apoio: 'a mensagem de rede de apoio', obrigado: 'o agradecimento (estende o Premium para 21 dias)' };
   const oQue = oQueMapa[acao];
   if (!confirm(`Enviar ${oQue} para ${nome || email}?\n\nO e-mail sai para ${email}.`)) return;
   const textoOriginal = btn.textContent;
   btn.disabled = true; btn.classList.add('enviando'); btn.textContent = 'Enviando…';
-  const fnMapa = { convite: 'kv_admin_convite', recuperacao: 'kv_admin_recuperacao', habito: 'kv_admin_habito', apoio: 'kv_admin_apoio' };
+  const fnMapa = { convite: 'kv_admin_convite', recuperacao: 'kv_admin_recuperacao', habito: 'kv_admin_habito', apoio: 'kv_admin_apoio', obrigado: 'kv_admin_obrigado' };
   const fn = fnMapa[acao];
   const { data, error } = await sb.rpc(fn, { p_email: email });
   btn.classList.remove('enviando');
