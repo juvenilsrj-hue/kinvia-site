@@ -472,8 +472,9 @@ function botaoEnvio(p, acao) {
     if (p.horasParado == null || p.horasParado <= 72)
       return '<button class="disp" disabled title="Registrou nas últimas 72 horas">Em dia</button>';
   }
-  if (acao === 'obrigado' && !p.entrou) {
-    return '<button class="disp" disabled title="Este agradecimento é para quem já está usando">Não entrou</button>';
+  if (acao === 'obrigado') {
+    if (!p.obrigadoOk) return '';   // gesto pontual: botão só para quem foi liberado
+    if (!p.entrou) return '<button class="disp" disabled title="Este agradecimento é para quem já está usando">Não entrou</button>';
   }
   if (acao === 'apoio' && p.parentesco && ['mãe','mae','pai'].includes(p.parentesco.toLowerCase())) {
     return '<button class="disp" disabled title="É ' + esc(p.parentesco) + ' do bebê: a mensagem de rede de apoio não se aplica">É da família</button>';
