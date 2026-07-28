@@ -75,6 +75,7 @@
   /* ===== tabelas ===== */
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow-x:auto;margin-bottom:18px}
   table{width:100%;border-collapse:collapse;font-size:.87rem;min-width:640px}
+  th:last-child,td:last-child{padding-right:18px}
   th{text-align:left;font-size:.69rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
   th.num,td.num{text-align:center}
   td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -480,7 +481,7 @@ function botaoEnvio(p, acao) {
     return '<button class="disp" disabled title="É ' + esc(p.parentesco) + ' do bebê: a mensagem de rede de apoio não se aplica">É da família</button>';
   }
   const jaFoi = env && (env.status === 'enviado' || env.status === 'enviando');
-  const rotulos = { convite: 'Disparar convite', recuperacao: 'Disparar recuperação', habito: 'Retomar hábito', apoio: 'Reforçar apoio', obrigado: 'Agradecer + 21 dias' };
+  const rotulos = { convite: 'Disparar convite', recuperacao: 'Disparar recuperação', habito: 'Retomar hábito', apoio: 'Reforçar apoio', obrigado: '🎁 Agradecer' };
   const rotulo = jaFoi ? 'Reenviar' : rotulos[acao];
   const marca = env
     ? (env.status === 'enviado' ? `<span class="env-ok">✓ enviado ${esc(env.quando)}</span>`
