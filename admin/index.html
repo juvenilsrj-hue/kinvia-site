@@ -460,12 +460,13 @@ function render(d) {
       </div>
       <div class="sec">Quem se cadastrou, por canal (${cadastros.length})</div>
       <div class="card">${cadastros.length ? `<table>
-        <thead><tr><th>Pessoa</th><th>Canal</th><th>Entrou no app?</th><th>Cadastro em</th></tr></thead>
+        <thead><tr><th>Pessoa</th><th>Canal</th><th>Entrou no app?</th><th>Cadastro em</th><th class="num">Dias</th></tr></thead>
         <tbody>${cadastros.map(c => `
           <tr><td class="who-cel"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></td>
             <td><span class="pill ${c.canal.indexOf('espera') >= 0 ? 'info' : 'ok'}">${esc(c.canal)}</span></td>
             <td>${c.entrou ? '<span class="pill ok">Entrou</span>' : '<span class="pill wait">Ainda não</span>'}</td>
-            <td class="when">${esc(c.criadoEm)}</td></tr>`).join('')}</tbody>
+            <td class="when">${esc(c.criadoEm)}</td>
+            <td class="num">${c.dias === 0 ? 'hoje' : (c.dias === 1 ? '1 dia' : c.dias + ' dias')}</td></tr>`).join('')}</tbody>
       </table>` : '<div class="vazio">Nenhum cadastro ainda.</div>'}</div>
       <p class="nota"><b>Lista de espera (site)</b> = deixou o e-mail no formulário do site antes de entrar. <b>Cadastro direto</b> = criou a conta direto no app (Google Play ou link), ou foi convidada pela equipe. Para separar melhor os canais no futuro, dá para marcar a origem no cadastro do app.</p>
     </div>
