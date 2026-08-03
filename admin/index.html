@@ -336,14 +336,17 @@ function voltarAoLogin(aviso) {
 function render(d) {
   const m = d.metricas || {}, lm = d.leadsMetricas || {};
   const participantes = d.participantes || [], leads = d.leads || [], churn = d.churn || [],
-        top = d.top || [], contatos = d.contatos || [], cuidadores = d.cuidadores || [];
+        top = d.top || [], contatos = d.contatos || [], cuidadores = d.cuidadores || [],
+        cadastros = d.cadastros || [], ativas = d.ativas || [];
+  // resumo por canal
+  const canais = {}; cadastros.forEach(c => { canais[c.canal] = (canais[c.canal] || 0) + 1; });
   const maxTop = top.length ? Math.max(...top.map(t => t.n)) : 1;
   const recuperados = churn.filter(c => c.status === 'recuperado').length;
   const contatados = churn.filter(c => c.status === 'contatado').length;
 
   $('conteudo').innerHTML = `
     <div class="metrics">
-      <div class="metric"><div class="k">Participantes</div><div class="v">${m.contas ?? 0}</div></div>
+      <div class="metric"><div class="k">Mães inscritas</div><div class="v">${m.contas ?? 0}</div></div>
       <div class="metric"><div class="k">Já entraram</div><div class="v">${m.entraram ?? 0} <small>de ${m.contas ?? 0}</small></div></div>
       <div class="metric"><div class="k">Ativas (7 dias)</div><div class="v">${m.ativas7d ?? 0}</div></div>
       <div class="metric${(m.paradas72h ?? 0) > 0 ? ' risco' : ''}"><div class="k">Paradas +72h</div><div class="v">${m.paradas72h ?? 0}</div></div>
@@ -354,6 +357,8 @@ function render(d) {
 
     <div class="tabs">
       <button class="tab on" data-p="maes">👶 Mães do beta</button>
+      <button class="tab" data-p="cadastros">📋 Cadastros</button>
+      <button class="tab" data-p="registrando">✍️ Registrando</button>
       <button class="tab" data-p="leads">💛 Lista de espera</button>
       <button class="tab" data-p="churn">🛟 Retenção</button>
     </div>
@@ -366,7 +371,7 @@ function render(d) {
             <div class="bar"><i style="width:${Math.round(t.n / maxTop * 100)}%"></i></div>
             <div class="ct">${t.n}</div></div>`).join('') : '<div class="vazio">Nenhum registro ainda.</div>'}
       </div></div>
-      <div class="sec">Participantes (${participantes.length})</div>
+      <div class="sec">Mães inscritas (${participantes.length})</div>
       <div class="card"><table>
         <thead><tr><th>Pessoa</th><th>Bebê</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th>Premium até</th><th>Retomar hábito</th><th>Agradecer</th></tr></thead>
         <tbody>${participantes.map(p => `
@@ -446,6 +451,42 @@ function render(d) {
             <td>${botaoEnvio(c, 'recuperacao')}</td></tr>`).join('')}</tbody>
       </table>` : '<div class="vazio">Ninguém na lista de retenção.</div>'}</div>
       <p class="nota">Reativar = já usou o app e esfriou. Ativar = nunca fez o primeiro acesso. Para mudar um status, peça no chat do Claude.</p>
+    </div>
+
+    <div class="pane" id="p-cadastros">
+      <div class="metrics">
+        ${Object.keys(canais).length ? Object.keys(canais).map(k => `
+          <div class="metric"><div class="k">${esc(k)}</div><div class="v">${canais[k]}</div></div>`).join('')
+          : '<div class="metric"><div class="k">Cadastros</div><div class="v">0</div></div>'}
+      </div>
+      <div class="sec">Quem se cadastrou, por canal (${cadastros.length})</div>
+      <div class="card">${cadastros.length ? `<table>
+        <thead><tr><th>Pessoa</th><th>Canal</th><th>Entrou no app?</th><th>Cadastro em</th></tr></thead>
+        <tbody>${cadastros.map(c => `
+          <tr><td class="who-cel"><b>${esc(c.nome)}</b><small>${esc(c.email)}</small></td>
+            <td><span class="pill ${c.canal.indexOf('espera') >= 0 ? 'info' : 'ok'}">${esc(c.canal)}</span></td>
+            <td>${c.entrou ? '<span class="pill ok">Entrou</span>' : '<span class="pill wait">Ainda não</span>'}</td>
+            <td class="when">${esc(c.criadoEm)}</td></tr>`).join('')}</tbody>
+      </table>` : '<div class="vazio">Nenhum cadastro ainda.</div>'}</div>
+      <p class="nota"><b>Lista de espera (site)</b> = deixou o e-mail no formulário do site antes de entrar. <b>Cadastro direto</b> = criou a conta direto no app (Google Play ou link), ou foi convidada pela equipe. Para separar melhor os canais no futuro, dá para marcar a origem no cadastro do app.</p>
+    </div>
+
+    <div class="pane" id="p-registrando">
+      <div class="metrics">
+        <div class="metric bom"><div class="k">Registrando (7 dias)</div><div class="v">${ativas.length}</div></div>
+        <div class="metric"><div class="k">Registros na semana</div><div class="v">${ativas.reduce((s,a)=>s+(a.reg7d||0),0)}</div></div>
+      </div>
+      <div class="sec">Quem está registrando a rotina agora</div>
+      <div class="card">${ativas.length ? `<table>
+        <thead><tr><th>Pessoa</th><th>Bebê</th><th class="num">Registros (7 dias)</th><th class="num">Total</th><th>Último registro</th></tr></thead>
+        <tbody>${ativas.map(a => `
+          <tr><td class="who-cel"><b>${esc(a.nome)}</b><small>${esc(a.email)}</small></td>
+            <td class="when">${a.bebeNome ? esc(a.bebeNome) : '<span style="color:var(--muted)">sem nome</span>'}</td>
+            <td class="num"><b style="color:var(--ok)">${a.reg7d}</b></td>
+            <td class="num">${a.registros}</td>
+            <td class="when">${a.ultimoRegistro ? esc(a.ultimoRegistro) : '—'}</td></tr>`).join('')}</tbody>
+      </table>` : '<div class="vazio">Ninguém registrou nada nos últimos 7 dias.</div>'}</div>
+      <p class="nota">Conta os registros de fato lançados no app (mamada, sono, fralda…) nos últimos 7 dias, pela data em que foram criados. Mostra quem está usando o app de verdade, não só abrindo.</p>
     </div>
 
     <p class="nota" style="text-align:center;margin-top:22px">Dados ao vivo do banco · gerado em <b>${esc(d.geradoEm)}</b></p>
