@@ -2,6 +2,20 @@
 [build]
   publish = "."
 
+# Link da marca para o app (a origem oficial do app segue no Netlify do app,
+# porque as lojas Android/iOS e o push estão amarrados àquele domínio)
+[[redirects]]
+  from = "/app"
+  to = "https://diarioderotinadobebe.netlify.app/app.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/app/*"
+  to = "https://diarioderotinadobebe.netlify.app/app.html"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
