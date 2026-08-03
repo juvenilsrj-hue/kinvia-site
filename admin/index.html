@@ -371,8 +371,7 @@ function render(d) {
             <div class="bar"><i style="width:${Math.round(t.n / maxTop * 100)}%"></i></div>
             <div class="ct">${t.n}</div></div>`).join('') : '<div class="vazio">Nenhum registro ainda.</div>'}
       </div></div>
-      <div class="sec">Mães no app (${participantes.length})</div>
-      <div class="card"><table>
+      <div class="card" style="margin-top:18px"><table>
         <thead><tr><th>Pessoa</th><th>Bebê</th><th>Entrou?</th><th>Última atividade</th><th class="num">Registros</th><th>Premium até</th><th>Retomar hábito</th><th>Agradecer</th></tr></thead>
         <tbody>${participantes.map(p => `
           <tr>
