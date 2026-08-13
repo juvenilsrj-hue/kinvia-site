@@ -196,7 +196,7 @@ const sb = supabase.createClient(SB_URL, SB_KEY, {
 
 const $ = id => document.getElementById(id);
 const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const NOMES = {sono:'😴 Sono', mama:'🍼 Mamada', fralda:'🧷 Fralda', banho:'🛁 Banho', remedio:'💊 Remédio',
+const NOMES = {sono:'😴 Sono', mama:'🍼 Amamentação', fralda:'🧷 Fralda', banho:'🛁 Banho', remedio:'💊 Remédio',
   vacina:'💉 Vacina', marco:'🌟 Marco', humor:'😊 Humor', arroto:'💨 Arroto', alim:'🥄 Alimentação', febre:'🌡️ Febre'};
 
 /* ---------- login ---------- */
@@ -482,9 +482,15 @@ function render(d) {
             <td class="num"><b style="color:var(--ok)">${v.resgates}</b></td>
             <td class="num">${v.ultimos7}</td>
             <td>${v.ativo ? '<span class="pill ok">Ativa</span>' : '<span class="pill perd">Pausada</span>'}</td></tr>
-          ${(v.lista || []).length ? `<tr><td colspan="6" style="padding-top:0"><small style="color:var(--muted)">${v.lista.map(u => esc(u.nome ? u.nome.split(' ')[0] : '?') + ' · ' + esc(u.email || '?') + ' (' + esc(u.quando) + ') ' + (u.ativada ? '✅ ativada' : '⏳ aguardando ativação')).join('<br>')}</small></td></tr>` : ''}`).join('')}</tbody>
+          ${(v.lista || []).length ? v.lista.map(u => `<tr><td colspan="6" style="padding-top:0">
+            <small style="color:var(--muted)"><b>${esc(u.nome ? u.nome.split(' ')[0] : '?')}</b> · ${esc(u.email || '?')} (${esc(u.quando)})</small>
+            ${u.ativada
+              ? ' <span class="pill ok">✓ Ativada</span>'
+              : ` <button class="disp" data-acao="campanha" data-email="${esc(u.email)}" data-nome="${esc(u.nome || '')}">💌 Ativar e enviar carta</button>
+                  <button class="ver" data-ver="campanha" data-email="${esc(u.email)}">👁 Ver a carta</button>`}
+          </td></tr>`).join('') : ''}`).join('')}</tbody>
       </table>` : '<div class="vazio">Nenhuma campanha ainda.</div>'}</div>
-      <p class="nota"><b>Na lista</b> = deixou o contato na página da campanha (kinvia.com.br/sonoleve). <b>Ativadas</b> = contas criadas pela equipe com o mês de Premium. Quem está ⏳ aguardando: peça no chat do Claude para ativar e enviar as boas-vindas.</p>
+      <p class="nota"><b>Na lista</b> = deixou o contato na página da campanha (kinvia.com.br/sonoleve). <b>Ativar e enviar carta</b> faz tudo de uma vez: cria a conta, aplica o mês de Premium (que só começa a contar no primeiro acesso) e envia a carta de apresentação com a direção para as lojas. A senha vai no e-mail, você não precisa anotar nada.</p>
 
       <div class="sec">Quem se cadastrou, por canal (${cadastros.length})</div>
       <div class="card">${cadastros.length ? `<table>
@@ -607,12 +613,12 @@ async function verEmail(email, acao) {
 
 async function disparar(btn) {
   const { acao, email, nome } = btn.dataset;
-  const oQueMapa = { convite: 'o convite de acesso', recuperacao: 'a mensagem de recuperação', habito: 'a mensagem de retomada de hábito', apoio: 'a mensagem de rede de apoio', obrigado: 'o agradecimento (estende o Premium para 21 dias)' };
+  const oQueMapa = { convite: 'o convite de acesso', recuperacao: 'a mensagem de recuperação', habito: 'a mensagem de retomada de hábito', apoio: 'a mensagem de rede de apoio', obrigado: 'o agradecimento (estende o Premium para 21 dias)', campanha: 'a carta de apresentação (cria a conta com 1 mês de Premium e envia o acesso)' };
   const oQue = oQueMapa[acao];
   if (!confirm(`Enviar ${oQue} para ${nome || email}?\n\nO e-mail sai para ${email}.`)) return;
   const textoOriginal = btn.textContent;
   btn.disabled = true; btn.classList.add('enviando'); btn.textContent = 'Enviando…';
-  const fnMapa = { convite: 'kv_admin_convite', recuperacao: 'kv_admin_recuperacao', habito: 'kv_admin_habito', apoio: 'kv_admin_apoio', obrigado: 'kv_admin_obrigado' };
+  const fnMapa = { convite: 'kv_admin_convite', recuperacao: 'kv_admin_recuperacao', habito: 'kv_admin_habito', apoio: 'kv_admin_apoio', obrigado: 'kv_admin_obrigado', campanha: 'kv_admin_ativar_campanha' };
   const fn = fnMapa[acao];
   const { data, error } = await sb.rpc(fn, { p_email: email });
   btn.classList.remove('enviando');
