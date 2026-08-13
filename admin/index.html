@@ -472,17 +472,19 @@ function render(d) {
           <div class="metric"><div class="k">${esc(k)}</div><div class="v">${canais[k]}</div></div>`).join('')
           : '<div class="metric"><div class="k">Cadastros</div><div class="v">0</div></div>'}
       </div>
-      <div class="sec">Campanhas (código no panfleto, QR ou link)</div>
+      <div class="sec">Campanhas (QR do panfleto → lista → ativação)</div>
       <div class="card">${vouchers.length ? `<table>
-        <thead><tr><th>Código</th><th>Campanha</th><th class="num">Resgates</th><th class="num">Últimos 7 dias</th><th>Situação</th></tr></thead>
+        <thead><tr><th>Código</th><th>Campanha</th><th class="num">Na lista</th><th class="num">Ativadas</th><th class="num">Últimos 7 dias</th><th>Situação</th></tr></thead>
         <tbody>${vouchers.map(v => `
           <tr><td><b style="letter-spacing:.5px">${esc(v.code)}</b></td>
             <td class="when">${esc(v.campanha)} · ${v.dias} dias de Premium</td>
-            <td class="num"><b>${v.resgates}</b></td>
+            <td class="num"><b>${v.inscritos ?? 0}</b></td>
+            <td class="num"><b style="color:var(--ok)">${v.resgates}</b></td>
             <td class="num">${v.ultimos7}</td>
             <td>${v.ativo ? '<span class="pill ok">Ativa</span>' : '<span class="pill perd">Pausada</span>'}</td></tr>
-          ${(v.lista || []).length ? `<tr><td colspan="5" style="padding-top:0"><small style="color:var(--muted)">${v.lista.map(u => esc(u.email || '?') + ' (' + esc(u.quando) + ')').join(' · ')}</small></td></tr>` : ''}`).join('')}</tbody>
+          ${(v.lista || []).length ? `<tr><td colspan="6" style="padding-top:0"><small style="color:var(--muted)">${v.lista.map(u => esc(u.nome ? u.nome.split(' ')[0] : '?') + ' · ' + esc(u.email || '?') + ' (' + esc(u.quando) + ') ' + (u.ativada ? '✅ ativada' : '⏳ aguardando ativação')).join('<br>')}</small></td></tr>` : ''}`).join('')}</tbody>
       </table>` : '<div class="vazio">Nenhuma campanha ainda.</div>'}</div>
+      <p class="nota"><b>Na lista</b> = deixou o contato na página da campanha (kinvia.com.br/sonoleve). <b>Ativadas</b> = contas criadas pela equipe com o mês de Premium. Quem está ⏳ aguardando: peça no chat do Claude para ativar e enviar as boas-vindas.</p>
 
       <div class="sec">Quem se cadastrou, por canal (${cadastros.length})</div>
       <div class="card">${cadastros.length ? `<table>
