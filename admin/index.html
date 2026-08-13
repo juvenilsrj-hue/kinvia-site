@@ -321,6 +321,9 @@ async function carregar(recarregando) {
 
   if (recarregando) $('conteudo').innerHTML = '<div class="loading">Atualizando…</div>';
   const { data, error } = await sb.rpc('kv_admin_overview');
+  if (!error && data) {
+    try { const rv = await sb.rpc('kv_admin_vouchers'); data.vouchers = rv.data || []; } catch (e) { data.vouchers = []; }
+  }
   if (error) {
     const m = error.message || '';
     if (/jwt|token|expired|session|not authenticated|401/i.test(m)) {
@@ -348,7 +351,7 @@ function render(d) {
   const m = d.metricas || {}, lm = d.leadsMetricas || {};
   const participantes = d.participantes || [], leads = d.leads || [], churn = d.churn || [],
         top = d.top || [], contatos = d.contatos || [], cuidadores = d.cuidadores || [],
-        cadastros = d.cadastros || [], ativas = d.ativas || [];
+        cadastros = d.cadastros || [], ativas = d.ativas || [], vouchers = d.vouchers || [];
   // resumo por canal
   const canais = {}; cadastros.forEach(c => { canais[c.canal] = (canais[c.canal] || 0) + 1; });
   const maxTop = top.length ? Math.max(...top.map(t => t.n)) : 1;
@@ -469,6 +472,18 @@ function render(d) {
           <div class="metric"><div class="k">${esc(k)}</div><div class="v">${canais[k]}</div></div>`).join('')
           : '<div class="metric"><div class="k">Cadastros</div><div class="v">0</div></div>'}
       </div>
+      <div class="sec">Campanhas (código no panfleto, QR ou link)</div>
+      <div class="card">${vouchers.length ? `<table>
+        <thead><tr><th>Código</th><th>Campanha</th><th class="num">Resgates</th><th class="num">Últimos 7 dias</th><th>Situação</th></tr></thead>
+        <tbody>${vouchers.map(v => `
+          <tr><td><b style="letter-spacing:.5px">${esc(v.code)}</b></td>
+            <td class="when">${esc(v.campanha)} · ${v.dias} dias de Premium</td>
+            <td class="num"><b>${v.resgates}</b></td>
+            <td class="num">${v.ultimos7}</td>
+            <td>${v.ativo ? '<span class="pill ok">Ativa</span>' : '<span class="pill perd">Pausada</span>'}</td></tr>
+          ${(v.lista || []).length ? `<tr><td colspan="5" style="padding-top:0"><small style="color:var(--muted)">${v.lista.map(u => esc(u.email || '?') + ' (' + esc(u.quando) + ')').join(' · ')}</small></td></tr>` : ''}`).join('')}</tbody>
+      </table>` : '<div class="vazio">Nenhuma campanha ainda.</div>'}</div>
+
       <div class="sec">Quem se cadastrou, por canal (${cadastros.length})</div>
       <div class="card">${cadastros.length ? `<table>
         <thead><tr><th>Pessoa</th><th>Canal</th><th>Entrou no app?</th><th>Cadastro em</th><th class="num">Dias</th></tr></thead>
